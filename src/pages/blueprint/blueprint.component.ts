@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { ApiService } from '../../api/api.service';
-import { Products } from '../../api/api.types';
+import { Product } from '../../api/api.types';
 
 @Component({
   selector: 'app-blueprint',
@@ -34,7 +34,7 @@ import { Products } from '../../api/api.types';
     </p-table>`,
 })
 export class BlueprintComponent implements OnInit {
-  data: Products[] = [];
+  data: Product[] = [];
   loading = true;
 
   constructor(private api: ApiService) {}
