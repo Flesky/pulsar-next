@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DashboardComponent } from '../pages/dashboard/dashboard.component';
-import { ServicesComponent } from '../pages/services/services.component';
-import { TemplatesComponent } from '../pages/templates/templates.component';
-import { TagsComponent } from '../pages/tags/tags.component';
-import { BlueprintComponent } from '../pages/blueprint/blueprint.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { ServicesComponent } from './services/services.component';
+import { TemplatesComponent } from './templates/templates.component';
+import { TagsComponent } from './tags/tags.component';
+import { ProductsComponent } from './products/products.component';
 
 const routes: Routes = [
   {
@@ -13,8 +13,8 @@ const routes: Routes = [
     redirectTo: '/dashboard',
   },
   {
-    path: 'blueprint',
-    component: BlueprintComponent,
+    path: 'products',
+    component: ProductsComponent,
   },
   {
     path: 'dashboard',

@@ -36,7 +36,7 @@ type MenuItem = Route | Title | Separator;
     `,
   ],
   template: `
-    <div class="h-full w-60 shrink-0 overflow-y-auto bg-[#0067b4] py-2">
+    <div class="bg-primary h-full w-64 shrink-0 overflow-y-auto py-2">
       <img alt="Pulsar logo" class="px-4" src="../../assets/logo.png" />
       <div class="p-inputgroup p-4">
         <p-inputNumber
@@ -47,25 +47,25 @@ type MenuItem = Route | Title | Separator;
           <fa-icon [icon]="faCircleArrowRight"></fa-icon>
         </button>
       </div>
-      <ul class="text-white">
+      <ul class="tracking-none text-white">
         <ng-container *ngFor="let item of items; let i = index">
           <li *ngIf="isRoute(item)">
             <a
               class="flex w-full items-center px-4 py-2"
               [routerLink]="item.link"
-              [routerLinkActive]="'bg-primary-800'"
+              [routerLinkActive]="'bg-primary-dark'"
             >
               <fa-icon
                 [icon]="item.icon"
-                class="mr-2.5 block w-5 text-center"
+                class="mr-3 block w-5 text-center"
               ></fa-icon>
-              <span class="text-sm">{{ item.label }}</span></a
+              <span>{{ item.label }}</span></a
             >
           </li>
-          <li class="px-4 pb-2 pt-3 text-sm font-medium" *ngIf="isTitle(item)">
+          <li class="px-4 pb-2 pt-3 font-medium" *ngIf="isTitle(item)">
             {{ item.title }}
           </li>
-          <hr class="my-1 border-gray-200/25" *ngIf="isSeparator(item)" />
+          <hr class="my-1.5 border-gray-200/25" *ngIf="isSeparator(item)" />
         </ng-container>
       </ul>
     </div>
@@ -86,9 +86,9 @@ export class SidebarComponent {
       separator: true,
     },
     {
-      label: 'Blueprint',
+      label: 'Products (testing only)',
       icon: faCube,
-      link: '/blueprint',
+      link: '/products',
     },
     {
       separator: true,

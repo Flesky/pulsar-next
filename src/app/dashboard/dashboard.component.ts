@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
   selector: 'app-dashboard',
   standalone: true,
   imports: [CommonModule],
-  template: ``,
+  template: `<p>
+    The other pages will be re-enabled once the functionality is complete.
+  </p>`,
 })
 export class DashboardComponent {}
