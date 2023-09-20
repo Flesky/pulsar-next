@@ -17,9 +17,9 @@ body {
 }
 
 .p-datatable-thead > tr > th {
-  @apply !bg-primary !text-white
+  @apply !bg-primary !text-white;
 }
 
 .p-paginator .p-dropdown .p-dropdown-label {
-  @apply pt-[5px]
+  @apply pt-[5px];
 }
