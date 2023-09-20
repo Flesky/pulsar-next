@@ -13,7 +13,9 @@ export class ApiService {
 
   buildQuery(state: TableLazyLoadEvent) {
     const query = `skip=${state.first}&limit=${state.rows}`;
-    const searchValue = (state.filters!['search'] as FilterMetadata).value;
+    const searchValue = (state.filters?.['search'] as FilterMetadata)?.[
+      'value'
+    ];
     return searchValue ? `/search?q=${searchValue}&${query}` : `?${query}`;
   }
 

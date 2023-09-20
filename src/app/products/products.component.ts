@@ -39,8 +39,6 @@ import { PaginatorModule } from 'primeng/paginator';
       [rowsPerPageOptions]="[10, 20, 50, 100]"
       [totalRecords]="totalRecords"
       [loading]="loading"
-      stateStorage="session"
-      stateKey="table-test"
       styleClass="p-datatable-gridlines"
     >
       <ng-template pTemplate="caption">
