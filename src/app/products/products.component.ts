@@ -1,62 +1,103 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TableModule } from 'primeng/table';
+import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { ApiService } from '../../api/api.service';
 import { Product } from '../../api/api.types';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { SelectedProductComponent } from './selected-product.component';
+import { ProductComponent } from './product.component';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
+import { PaginatorModule } from 'primeng/paginator';
 
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule, TableModule, ProgressSpinnerModule],
+  imports: [
+    CommonModule,
+    TableModule,
+    ProgressSpinnerModule,
+    InputTextModule,
+    ButtonModule,
+    PaginatorModule,
+  ],
   providers: [ApiService, DialogService],
-  template: ` <div>
+  template: `
+    <div>
       This is a test page to compose functionality before copying it into other
       elements.
     </div>
+    <div class="mb-4 flex justify-between"></div>
+
     <p-table
-      [loading]="loading"
+      [lazy]="true"
       [value]="data"
+      dataKey="id"
+      (onLazyLoad)="getData($event)"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[10, 20, 50, 100]"
+      [totalRecords]="totalRecords"
+      [loading]="loading"
       stateStorage="session"
       stateKey="table-test"
+      styleClass="p-datatable-gridlines"
     >
+      <ng-template pTemplate="caption">
+        <div class="flex justify-between">
+          <p-columnFilter
+            type="text"
+            field="search"
+            [showMenu]="false"
+            placeholder="Filter products"
+          ></p-columnFilter>
+          <button pButton styleClass="p-success">New product</button>
+        </div>
+      </ng-template>
       <ng-template pTemplate="header">
         <tr>
           <th>ID</th>
           <th>Name</th>
+          <th>Price</th>
+          <th>Brand</th>
+          <th>Category</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-product>
         <tr (click)="select(product)">
           <td>{{ product.id }}</td>
           <td>{{ product.title }}</td>
+          <td>{{ product.price }}</td>
+          <td>{{ product.brand }}</td>
+          <td>{{ product.category }}</td>
         </tr>
       </ng-template>
-    </p-table>`,
+    </p-table>
+  `,
 })
-export class ProductsComponent implements OnInit {
+export class ProductsComponent {
   data: Product[] = [];
+  totalRecords = 0;
   loading = true;
 
-  ref: DynamicDialogRef | undefined;
+  dialog: DynamicDialogRef | undefined;
 
   constructor(
     private api: ApiService,
     private dialogService: DialogService,
   ) {}
 
-  getData() {
-    this.api.getProducts().subscribe((res) => {
-      console.log(res.products);
+  getData(state: TableLazyLoadEvent) {
+    this.loading = true;
+    this.api.getProducts(state).subscribe((res) => {
       this.data = res.products;
+      this.totalRecords = res.total;
       this.loading = false;
     });
   }
 
   select(product: Product) {
-    this.ref = this.dialogService.open(SelectedProductComponent, {
+    this.dialog = this.dialogService.open(ProductComponent, {
       data: {
         id: product.id,
       },
@@ -65,10 +106,4 @@ export class ProductsComponent implements OnInit {
       dismissableMask: true,
     });
   }
-
-  ngOnInit() {
-    this.getData();
-  }
-
-  protected readonly console = console;
 }

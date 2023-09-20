@@ -28,15 +28,8 @@ type MenuItem = Route | Title | Separator;
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  styles: [
-    `
-      .p-inputtext {
-        font-size: 14px !important;
-      }
-    `,
-  ],
   template: `
-    <div class="bg-primary h-full w-64 shrink-0 overflow-y-auto py-2">
+    <div class="h-full w-64 shrink-0 overflow-y-auto bg-primary py-2">
       <img alt="Pulsar logo" class="px-4" src="../../assets/logo.png" />
       <div class="p-inputgroup p-4">
         <p-inputNumber
@@ -86,7 +79,10 @@ export class SidebarComponent {
       separator: true,
     },
     {
-      label: 'Products (testing only)',
+      title: 'Test Pages',
+    },
+    {
+      label: 'Products (external API)',
       icon: faCube,
       link: '/products',
     },

@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import "primeng/resources/themes/bootstrap4-light-blue/theme.css";
+/* Created with designer.primeng.org */
+@import "assets/pulsar-theme.css";
 @import "primeng/resources/primeng.css";
 
 @tailwind base;
@@ -17,4 +18,8 @@ body {
 
 .p-datatable-thead > tr > th {
   @apply !bg-primary !text-white
+}
+
+.p-paginator .p-dropdown .p-dropdown-label {
+  @apply pt-[5px]
 }

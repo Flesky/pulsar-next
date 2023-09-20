@@ -8,7 +8,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
   imports: [SidebarComponent, RouterOutlet],
   template: `<div class="absolute inset-0 flex h-full w-full">
     <app-sidebar />
-    <div class="h-full grow overflow-y-auto p-4">
+    <div class="h-full grow overflow-y-auto p-8">
       <router-outlet></router-outlet>
     </div>
   </div> `,
