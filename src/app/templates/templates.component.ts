@@ -8,7 +8,6 @@ import { DynamicDialogDefaults } from '../../utils/defaults'
 import { TableLazyLoadEvent, TableModule } from 'primeng/table'
 import { Template } from '../../api/api.types'
 import { CardModule } from 'primeng/card'
-import { load } from 'mime'
 
 @Component({
   selector: 'app-templates',
@@ -95,6 +94,4 @@ export class TemplatesComponent {
       ...DynamicDialogDefaults,
     })
   }
-
-  protected readonly load = load
 }
