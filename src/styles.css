@@ -1,6 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
-
 /* Created with designer.primeng.org */
+
 @import "assets/pulsar-theme.css";
 @import "primeng/resources/primeng.css";
 
@@ -16,10 +16,26 @@ body {
   font-family: var(--font-family);
 }
 
+h1 {
+  @apply text-3xl font-bold;
+}
+
 .p-datatable-thead > tr > th {
   @apply !bg-primary !text-white;
 }
 
 .p-paginator .p-dropdown .p-dropdown-label {
   @apply pt-[5px];
+}
+
+.dialog-form {
+  @apply min-h-[240px] flex flex-col justify-between;
+}
+
+.dialog-form-grid {
+  @apply min-h-[240px];
+}
+
+.dialog-form-footer {
+  @apply flex w-full justify-end;
 }

@@ -9,9 +9,7 @@ import { CommonModule } from '@angular/common';
     <p>
       tags works!
     </p>
-  `,
-  styles: [
-  ]
+  `
 })
 export class TagsComponent {
 

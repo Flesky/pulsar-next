@@ -1,14 +1,15 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { TableLazyLoadEvent, TableModule } from 'primeng/table';
-import { ApiService } from '../../api/api.service';
-import { Product } from '../../api/api.types';
-import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { ProductComponent } from './product.component';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { InputTextModule } from 'primeng/inputtext';
-import { ButtonModule } from 'primeng/button';
-import { PaginatorModule } from 'primeng/paginator';
+import { Component } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { TableLazyLoadEvent, TableModule } from 'primeng/table'
+import { ApiService } from '../../api/api.service'
+import { Product } from '../../api/api.types'
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog'
+import { ProgressSpinnerModule } from 'primeng/progressspinner'
+import { InputTextModule } from 'primeng/inputtext'
+import { ButtonModule } from 'primeng/button'
+import { PaginatorModule } from 'primeng/paginator'
+import { ProductComponent } from './product.component'
+import { DynamicDialogDefaults } from '../../utils/defaults'
 
 @Component({
   selector: 'app-products',
@@ -40,7 +41,6 @@ import { PaginatorModule } from 'primeng/paginator';
       [totalRecords]="totalRecords"
       [loading]="loading"
       [showCurrentPageReport]="true"
-      styleClass="p-datatable-gridlines"
     >
       <ng-template pTemplate="caption">
         <div class="flex justify-between">
@@ -50,7 +50,7 @@ import { PaginatorModule } from 'primeng/paginator';
             [showMenu]="false"
             placeholder="Filter products"
           ></p-columnFilter>
-          <button pButton styleClass="p-success">New product</button>
+          <button pButton class="p-success">New product</button>
         </div>
       </ng-template>
       <ng-template pTemplate="header">
@@ -62,24 +62,24 @@ import { PaginatorModule } from 'primeng/paginator';
           <th>Category</th>
         </tr>
       </ng-template>
-      <ng-template pTemplate="body" let-product>
-        <tr (click)="select(product)">
-          <td>{{ product.id }}</td>
-          <td>{{ product.title }}</td>
-          <td>{{ product.price }}</td>
-          <td>{{ product.brand }}</td>
-          <td>{{ product.category }}</td>
+      <ng-template pTemplate="body" let-row>
+        <tr (click)="select(row)">
+          <td>{{ row.id }}</td>
+          <td>{{ row.title }}</td>
+          <td>{{ row.price }}</td>
+          <td>{{ row.brand }}</td>
+          <td>{{ row.category }}</td>
         </tr>
       </ng-template>
     </p-table>
   `,
 })
 export class ProductsComponent {
-  data: Product[] = [];
-  totalRecords = 0;
-  loading = true;
+  data: Product[] = []
+  totalRecords = 0
+  loading = true
 
-  dialog: DynamicDialogRef | undefined;
+  dialog: DynamicDialogRef | undefined
 
   constructor(
     private api: ApiService,
@@ -87,12 +87,12 @@ export class ProductsComponent {
   ) {}
 
   getData(state: TableLazyLoadEvent) {
-    this.loading = true;
+    this.loading = true
     this.api.getProducts(state).subscribe((res) => {
-      this.data = res.products;
-      this.totalRecords = res.total;
-      this.loading = false;
-    });
+      this.data = res.products
+      this.totalRecords = res.total
+      this.loading = false
+    })
   }
 
   select(product: Product) {
@@ -101,8 +101,7 @@ export class ProductsComponent {
         id: product.id,
       },
       header: product.title,
-      width: '600px',
-      dismissableMask: true,
-    });
+      ...DynamicDialogDefaults,
+    })
   }
 }

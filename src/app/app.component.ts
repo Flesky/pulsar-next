@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { SidebarComponent } from './sidebar/sidebar.component';
+import { Component } from '@angular/core'
+import { RouterOutlet } from '@angular/router'
+import { SidebarComponent } from './sidebar/sidebar.component'
 
 @Component({
   selector: 'app-root',
@@ -8,11 +8,11 @@ import { SidebarComponent } from './sidebar/sidebar.component';
   imports: [SidebarComponent, RouterOutlet],
   template: `<div class="absolute inset-0 flex h-full w-full">
     <app-sidebar />
-    <div class="h-full grow overflow-y-auto p-8">
+    <div class="h-full grow overflow-y-auto bg-gray-100 p-8">
       <router-outlet></router-outlet>
     </div>
   </div> `,
 })
 export class AppComponent {
-  title = 'pulsar-next';
+  title = 'pulsar-next'
 }
