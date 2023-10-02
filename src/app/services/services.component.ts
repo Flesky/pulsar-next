@@ -1,17 +1,20 @@
 import { Component } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { TableLazyLoadEvent, TableModule } from 'primeng/table'
-import { ApiService } from '../../api/api.service'
-import { Service } from '../../api/api.types'
+import { MockService } from '../../api/mock.service'
+import { Service } from '../../api/mock.types'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { faLock, faLockOpen, faWifi } from '@fortawesome/free-solid-svg-icons'
 import { ButtonModule } from 'primeng/button'
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog'
+import { ServiceComponent } from './service.component'
+import { DynamicDialogDefaults } from '../../utils/defaults'
 
 @Component({
   selector: 'app-services',
   standalone: true,
   imports: [CommonModule, TableModule, FontAwesomeModule, ButtonModule],
-  providers: [ApiService],
+  providers: [MockService, DialogService],
   template: `<p-table
     [value]="data"
     [loading]="loading"
@@ -34,16 +37,26 @@ import { ButtonModule } from 'primeng/button'
     </ng-template>
     <ng-template pTemplate="header">
       <tr>
-        <th>Name</th>
-        <th>Vessel</th>
-        <th>Type</th>
-        <th>MSISDN</th>
-        <th>ICCID</th>
+        <th pSortableColumn="name">
+          Name<p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="vessel">
+          Vessel<p-sortIcon field="vessel"></p-sortIcon>
+        </th>
+        <th pSortableColumn="type">
+          Type<p-sortIcon field="type"></p-sortIcon>
+        </th>
+        <th pSortableColumn="MSISDN">
+          MSISDN<p-sortIcon field="MSISDN"></p-sortIcon>
+        </th>
+        <th pSortableColumn="ICCID">
+          ICCID<p-sortIcon field="ICCID"></p-sortIcon>
+        </th>
         <th>Status</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-row>
-      <tr>
+      <tr (click)="select(row)" class="cursor-pointer">
         <td>{{ row.name }}</td>
         <td>{{ row.vessel }}</td>
         <td>{{ row.type }}</td>
@@ -70,7 +83,12 @@ export class ServicesComponent {
   data: Service[] = []
   totalRecords = 0
   loading = true
-  constructor(private api: ApiService) {}
+
+  dialog: DynamicDialogRef | undefined
+  constructor(
+    private api: MockService,
+    private dialogService: DialogService,
+  ) {}
 
   get(state: TableLazyLoadEvent) {
     this.loading = true
@@ -78,6 +96,16 @@ export class ServicesComponent {
       this.data = data.data
       this.totalRecords = data.pagination.total
       this.loading = false
+    })
+  }
+
+  select(row: Service) {
+    this.dialog = this.dialogService.open(ServiceComponent, {
+      data: {
+        id: row.id,
+      },
+      header: `${row.vessel} (ID: ${row.id})`,
+      ...DynamicDialogDefaults,
     })
   }
 

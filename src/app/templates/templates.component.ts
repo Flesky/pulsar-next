@@ -1,19 +1,19 @@
 import { Component } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { ApiService } from '../../api/api.service'
+import { MockService } from '../../api/mock.service'
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog'
 import { TemplateComponent } from './template.component'
 import { ButtonModule } from 'primeng/button'
 import { DynamicDialogDefaults } from '../../utils/defaults'
 import { TableLazyLoadEvent, TableModule } from 'primeng/table'
-import { Template } from '../../api/api.types'
+import { Template } from '../../api/mock.types'
 import { CardModule } from 'primeng/card'
 
 @Component({
   selector: 'app-templates',
   standalone: true,
   imports: [CommonModule, TableModule, ButtonModule, CardModule],
-  providers: [ApiService, DialogService],
+  providers: [MockService, DialogService],
   template: `
     <p-table
       [value]="data"
@@ -34,7 +34,7 @@ import { CardModule } from 'primeng/card'
             placeholder="Filter templates"
           ></p-columnFilter>
           <button (click)="create()" pButton class="p-success">
-            New product
+            New template
           </button>
         </div>
       </ng-template>
@@ -57,12 +57,12 @@ import { CardModule } from 'primeng/card'
 })
 export class TemplatesComponent {
   data: Template[] = []
-  loading = true
   totalRecords = 0
+  loading = true
   dialog: DynamicDialogRef | undefined
 
   constructor(
-    private apiService: ApiService,
+    private apiService: MockService,
     private dialogService: DialogService,
   ) {}
 

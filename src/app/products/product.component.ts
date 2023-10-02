@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { TabViewModule } from 'primeng/tabview'
-import { ApiService } from '../../api/api.service'
-import { Product } from '../../api/api.types'
+import { MockService } from '../../api/mock.service'
+import { Product } from '../../api/mock.types'
 import { DynamicDialogConfig } from 'primeng/dynamicdialog'
 
 @Component({
@@ -32,7 +32,7 @@ export class ProductComponent implements OnInit {
 
   constructor(
     private config: DynamicDialogConfig,
-    private api: ApiService,
+    private api: MockService,
   ) {
     this.id = config.data.id
   }

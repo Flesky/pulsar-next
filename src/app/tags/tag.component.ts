@@ -12,7 +12,7 @@ import { FieldComponent } from '../shared/form/field.component'
 import { DynamicDialogConfig } from 'primeng/dynamicdialog'
 
 @Component({
-  selector: 'app-new-template',
+  selector: 'app-new-tag',
   standalone: true,
   imports: [
     CommonModule,
@@ -37,7 +37,7 @@ import { DynamicDialogConfig } from 'primeng/dynamicdialog'
     </div>
   </form>`,
 })
-export class TemplateComponent {
+export class TagComponent {
   form = new FormGroup({
     name: new FormControl('', [Validators.required]),
   })

@@ -20,9 +20,9 @@ h1 {
   @apply text-3xl font-bold;
 }
 
-.p-datatable-thead > tr > th {
-  @apply !bg-primary !text-white;
-}
+/*.p-datatable-thead > tr > th {*/
+/*  @apply !bg-primary !text-white;*/
+/*}*/
 
 .p-paginator .p-dropdown .p-dropdown-label {
   @apply pt-[5px];
@@ -30,6 +30,13 @@ h1 {
 
 .dialog-form {
   @apply min-h-[240px] flex flex-col justify-between;
+}
+
+dl {
+  @apply grid grid-cols-2 gap-2;
+}
+dl > dt {
+  @apply font-bold;
 }
 
 .dialog-form-grid {

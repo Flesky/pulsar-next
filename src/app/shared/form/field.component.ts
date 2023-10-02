@@ -10,10 +10,12 @@ import { FormsModule } from '@angular/forms'
     <div class="flex flex-col gap-2">
       <label [htmlFor]="for">{{ label }}</label>
       <ng-content />
+      <div class="text-danger">{{ message }}</div>
     </div>
   `,
 })
 export class FieldComponent {
   @Input() for!: string
   @Input() label!: string
+  @Input() message: string | undefined
 }

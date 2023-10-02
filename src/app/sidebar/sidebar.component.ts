@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
-import { NgForOf, NgIf } from '@angular/common';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Component } from '@angular/core'
+import { NgForOf, NgIf } from '@angular/common'
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
+import { RouterLink, RouterLinkActive } from '@angular/router'
 import {
   faBell,
   faChessRook,
@@ -15,21 +15,21 @@ import {
   faSatelliteDish,
   faTags,
   faUsers,
-} from '@fortawesome/free-solid-svg-icons';
-import { IconDefinition } from '@fortawesome/free-brands-svg-icons';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { ButtonModule } from 'primeng/button';
+} from '@fortawesome/free-solid-svg-icons'
+import { IconDefinition } from '@fortawesome/free-brands-svg-icons'
+import { InputNumberModule } from 'primeng/inputnumber'
+import { ButtonModule } from 'primeng/button'
 
-type Route = { label: string; icon: IconDefinition; link: string };
-type Title = { title: string };
-type Separator = { separator: true };
-type MenuItem = Route | Title | Separator;
+type Route = { label: string; icon: IconDefinition; link: string }
+type Title = { title: string }
+type Separator = { separator: true }
+type MenuItem = Route | Title | Separator
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
   template: `
-    <div class="h-full w-64 shrink-0 overflow-y-auto bg-primary py-2">
+    <div class="h-full w-64 shrink-0 overflow-y-auto bg-primary-dark py-2">
       <img alt="Pulsar logo" class="px-4" src="../../assets/logo.png" />
       <div class="p-inputgroup p-4">
         <p-inputNumber
@@ -46,7 +46,7 @@ type MenuItem = Route | Title | Separator;
             <a
               class="flex w-full items-center px-4 py-2"
               [routerLink]="item.link"
-              [routerLinkActive]="'bg-primary-dark'"
+              [routerLinkActive]="'bg-primary-darker'"
             >
               <fa-icon
                 [icon]="item.icon"
@@ -151,18 +151,18 @@ export class SidebarComponent {
       icon: faUsers,
       link: '/users',
     },
-  ];
+  ]
 
   // Type narrowing methods
   isRoute(item: MenuItem): item is Route {
-    return 'link' in item;
+    return 'link' in item
   }
   isTitle(item: MenuItem): item is Title {
-    return 'title' in item;
+    return 'title' in item
   }
   isSeparator(item: MenuItem): item is Separator {
-    return 'separator' in item;
+    return 'separator' in item
   }
 
-  protected readonly faCircleArrowRight = faCircleArrowRight;
+  protected readonly faCircleArrowRight = faCircleArrowRight
 }

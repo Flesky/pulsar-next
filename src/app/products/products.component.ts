@@ -1,8 +1,8 @@
 import { Component } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { TableLazyLoadEvent, TableModule } from 'primeng/table'
-import { ApiService } from '../../api/api.service'
-import { Product } from '../../api/api.types'
+import { MockService } from '../../api/mock.service'
+import { Product } from '../../api/mock.types'
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog'
 import { ProgressSpinnerModule } from 'primeng/progressspinner'
 import { InputTextModule } from 'primeng/inputtext'
@@ -22,7 +22,7 @@ import { DynamicDialogDefaults } from '../../utils/defaults'
     ButtonModule,
     PaginatorModule,
   ],
-  providers: [ApiService, DialogService],
+  providers: [MockService, DialogService],
   template: `
     <div>
       This is a test page to compose functionality before copying it into other
@@ -82,7 +82,7 @@ export class ProductsComponent {
   dialog: DynamicDialogRef | undefined
 
   constructor(
-    private api: ApiService,
+    private api: MockService,
     private dialogService: DialogService,
   ) {}
 

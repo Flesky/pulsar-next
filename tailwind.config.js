@@ -7,6 +7,7 @@ module.exports = {
         primary: {
           DEFAULT: 'var(--primary-500)',
           dark: 'var(--primary-600)',
+          darker: 'var(--primary-700)',
         },
         success: '#28A745',
         danger: '#DC3545',
