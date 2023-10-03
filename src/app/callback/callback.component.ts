@@ -43,14 +43,14 @@ export class CallbackComponent {
 
   private redirectToHome(): void {
     // Redirect to localhost:4200 after all operations are done
-    window.location.href = 'http://localhost:4200';
+    window.location.href = 'https://pulsar-portal.pages.dev';
   }
 
   private handleKeycloakCallback(code: string): Observable<any> {
     const keycloakBaseUrl = 'https://auth.passcess.net/auth/realms/master';
     const clientId = 'pulsar-portal';
     const clientSecret = 'your-client-secret';
-    const redirectUri = 'http://localhost:4200/callback';
+    const redirectUri = 'https://pulsar-portal.pages.dev/callback';
 
     const tokenUrl = `${keycloakBaseUrl}/protocol/openid-connect/token`;
 

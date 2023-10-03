@@ -8,6 +8,7 @@ import { DynamicDialogDefaults } from '../../utils/defaults'
 import { TableLazyLoadEvent, TableModule } from 'primeng/table'
 import { Tag } from '../../api/mock.types'
 import { CardModule } from 'primeng/card'
+import { AppComponent } from '../app.component'
 
 @Component({
   selector: 'app-tags',
@@ -62,7 +63,12 @@ export class TagsComponent {
   constructor(
     private apiService: MockService,
     private dialogService: DialogService,
+    private AppComponent: AppComponent,
   ) {}
+
+  ngOnInit(){
+    this.AppComponent.checkUserAccess();
+  }
 
   get(state: TableLazyLoadEvent) {
     this.loading = true

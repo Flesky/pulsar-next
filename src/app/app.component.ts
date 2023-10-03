@@ -104,7 +104,7 @@ export class AppComponent {
 
     const keycloakBaseUrl = 'https://auth.passcess.net/auth/realms/master';
     const clientId = 'pulsar-portal';
-    const redirectUri = 'http://localhost:4200/callback';
+    const redirectUri = 'https://pulsar-portal.pages.dev/callback';
 
     const authUrl = `${keycloakBaseUrl}/protocol/openid-connect/auth`;
 
@@ -127,7 +127,7 @@ export class AppComponent {
   logoutFromKeycloak(): void {
     const keycloakBaseUrl = 'https://auth.passcess.net/auth/realms/master';
     const clientId = 'pulsar-portal';
-    const redirectUri = 'http://localhost:4200/callback';
+    const redirectUri = 'https://pulsar-portal.pages.dev/callback';
 
     const logoutUrl = `${keycloakBaseUrl}/protocol/openid-connect/logout`;
 

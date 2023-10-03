@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button'
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog'
 import { ServiceComponent } from './service.component'
 import { DynamicDialogDefaults } from '../../utils/defaults'
+import { AppComponent } from '../app.component'
 
 @Component({
   selector: 'app-services',
@@ -88,7 +89,12 @@ export class ServicesComponent {
   constructor(
     private api: MockService,
     private dialogService: DialogService,
+    private AppComponent: AppComponent
   ) {}
+  
+  ngOnInit(){
+    this.AppComponent.checkUserAccess();
+  }
 
   get(state: TableLazyLoadEvent) {
     this.loading = true
