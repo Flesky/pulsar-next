@@ -5,12 +5,17 @@ import { ServicesComponent } from './services/services.component';
 import { TemplatesComponent } from './templates/templates.component';
 import { TagsComponent } from './tags/tags.component';
 import { ProductsComponent } from './products/products.component';
+import { CallbackComponent } from './callback/callback.component';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
     redirectTo: '/products',
+  },
+  {
+    path: 'callback',
+    component: CallbackComponent,
   },
   {
     path: 'products',
