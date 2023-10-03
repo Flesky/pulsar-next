@@ -10,11 +10,11 @@ import { AppComponent } from '../app.component';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <b>Token: </b>
+    <!-- <b>Token: </b>
     <div style="width:100vh">
     {{testDisplay}}
-  </div>
-
+  </div> -->
+  Redirecting...
   `
 })
 export class CallbackComponent {
@@ -36,9 +36,14 @@ export class CallbackComponent {
         }
       );
     }
-    else{
+    else {
       this.AppComponent.redirectToKeycloakLogin();
     }
+  }
+
+  private redirectToHome(): void {
+    // Redirect to localhost:4200 after all operations are done
+    window.location.href = 'http://localhost:4200';
   }
 
   private handleKeycloakCallback(code: string): Observable<any> {
@@ -67,8 +72,14 @@ export class CallbackComponent {
         map((response: any) => {
           this.accessToken = response.access_token;
           this.testDisplay = response.access_token;
+
+          document.cookie = `accessToken=${this.accessToken};`;
+
+          this.redirectToHome();
+
           return response;
         })
       );
+
   }
 }

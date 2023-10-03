@@ -25,9 +25,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
         
         <div class="sticky top-0 z-50 h-14 bg-primary">
           <div class="flex h-full w-full items-center justify-end px-4">
-          <button (click)="redirectToKeycloakLogin()">
-            Login
-          </button>
           <button (click)="logoutFromKeycloak()">
             Logout
           </button>
@@ -35,7 +32,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
               (click)="menu.toggle($event)"
               styleClass="p-button-text !text-white"
             >
-              Alexander Sakker
+              {{nameHandle}}
 
               <div
                 class="ml-2.5 flex h-10 w-10 items-center justify-center rounded-full bg-white"
@@ -65,6 +62,43 @@ export class AppComponent {
   protected readonly faUser = faUser
   protected readonly faCaretDown = faCaretDown
 
+  nameHandle:string = "Alexander Sakker";
+
+  constructor(private http: HttpClient) { }
+
+  ngOnInit() {
+
+  }
+
+  checkUserAccess() {
+    if (this.getCookie('accessToken')) {
+      const keycloakBaseUrl = 'https://auth.passcess.net/auth/realms/master';
+      const userInfoURL = `${keycloakBaseUrl}/protocol/openid-connect/userinfo`;
+
+      const options = {
+        headers: {
+          'Authorization': 'Bearer ' + this.getCookie('accessToken')
+        }
+      };
+
+      this.http.post(userInfoURL, null, options)
+        .subscribe(
+          (response: any) => {
+            console.log(response);
+            this.nameHandle = response.name;
+            
+          },
+          (error: any) => {
+            console.error('Error', error);
+            this.redirectToKeycloakLogin();
+          }
+        );
+    }
+    else {
+      this.redirectToKeycloakLogin();
+    }
+  }
+
   redirectToKeycloakLogin(): void {
     console.log("toggled");
 
@@ -93,19 +127,41 @@ export class AppComponent {
   logoutFromKeycloak(): void {
     const keycloakBaseUrl = 'https://auth.passcess.net/auth/realms/master';
     const clientId = 'pulsar-portal';
-    const redirectUri = 'http://localhost:4200/callback'; 
+    const redirectUri = 'http://localhost:4200/callback';
 
     const logoutUrl = `${keycloakBaseUrl}/protocol/openid-connect/logout`;
+
+    this.deleteCookie('accessToken');
 
     const queryParams = new HttpParams()
       .set('client_id', clientId)
       .set('redirect_uri', redirectUri);
 
     const redirectUrl = `${logoutUrl}?${queryParams.toString()}`;
-    
+
     // Use window.location.href to redirect the user to the Keycloak logout endpoint
     window.location.href = redirectUrl;
-  
+
+  }
+
+  getCookie(cookieName: any) {
+    let name = cookieName + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+
+  deleteCookie(cookieName: any) {
+    document.cookie = cookieName + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
   }
 
 }
