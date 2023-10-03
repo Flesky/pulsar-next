@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-callback',
@@ -20,7 +21,7 @@ export class CallbackComponent {
   private accessToken: string | null = null;
   testDisplay: any = null;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private AppComponent: AppComponent) { }
 
   ngOnInit() {
     const code = new URLSearchParams(window.location.search).get('code');
@@ -34,6 +35,9 @@ export class CallbackComponent {
           console.error('Error handling Keycloak callback:', error);
         }
       );
+    }
+    else{
+      this.AppComponent.redirectToKeycloakLogin();
     }
   }
 

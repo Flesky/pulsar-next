@@ -26,7 +26,10 @@ import { HttpClient, HttpParams } from '@angular/common/http';
         <div class="sticky top-0 z-50 h-14 bg-primary">
           <div class="flex h-full w-full items-center justify-end px-4">
           <button (click)="redirectToKeycloakLogin()">
-            test
+            Login
+          </button>
+          <button (click)="logoutFromKeycloak()">
+            Logout
           </button>
             <p-button
               (click)="menu.toggle($event)"
@@ -79,12 +82,30 @@ export class AppComponent {
       .set('redirect_uri', redirectUri)
       .set('response_type', 'code')
       .set('scope', 'openid')
-      // .set('state', state);
+    // .set('state', state);
 
     const redirectUrl = `${authUrl}?${queryParams.toString()}`;
-    
+
     // Use window.location.href to redirect the user to the Keycloak login page
     window.location.href = redirectUrl;
   }
+
+  logoutFromKeycloak(): void {
+    const keycloakBaseUrl = 'https://auth.passcess.net/auth/realms/master';
+    const clientId = 'pulsar-portal';
+    const redirectUri = 'http://localhost:4200/callback'; 
+
+    const logoutUrl = `${keycloakBaseUrl}/protocol/openid-connect/logout`;
+
+    const queryParams = new HttpParams()
+      .set('client_id', clientId)
+      .set('redirect_uri', redirectUri);
+
+    const redirectUrl = `${logoutUrl}?${queryParams.toString()}`;
+    
+    // Use window.location.href to redirect the user to the Keycloak logout endpoint
+    window.location.href = redirectUrl;
   
+  }
+
 }
