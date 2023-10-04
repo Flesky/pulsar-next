@@ -64,7 +64,7 @@ import { NgIf } from '@angular/common'
   `,
 })
 export class AppComponent implements OnInit {
-  name: string | undefined = 'Test'
+  name: string | undefined
   isCollapsed = false
 
   constructor(private oauthService: OAuthService) {}
