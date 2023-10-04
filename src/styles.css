@@ -39,7 +39,7 @@ dl > dt {
   @apply font-bold;
 }
 
-tr {
+.p-datatable-hoverable-rows > div > table > tbody > tr {
   @apply cursor-pointer;
 }
 
