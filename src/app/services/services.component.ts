@@ -9,12 +9,18 @@ import { ButtonModule } from 'primeng/button'
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog'
 import { ServiceComponent } from './service.component'
 import { DynamicDialogDefaults } from '../../utils/defaults'
-import { AppComponent } from '../app.component'
+import { ProgressSpinnerModule } from 'primeng/progressspinner'
 
 @Component({
   selector: 'app-services',
   standalone: true,
-  imports: [CommonModule, TableModule, FontAwesomeModule, ButtonModule],
+  imports: [
+    CommonModule,
+    TableModule,
+    FontAwesomeModule,
+    ButtonModule,
+    ProgressSpinnerModule,
+  ],
   providers: [MockService, DialogService],
   template: `<p-table
     [value]="data"
@@ -22,18 +28,28 @@ import { AppComponent } from '../app.component'
     [lazy]="true"
     (onLazyLoad)="get($event)"
     [paginator]="true"
-    [rows]="10"
+    [showJumpToPageDropdown]="true"
     [rowsPerPageOptions]="[10, 20, 50, 100]"
+    [showPageLinks]="false"
+    [rows]="10"
+    [rowHover]="true"
+    [showLoader]="false"
     [totalRecords]="totalRecords"
   >
     <ng-template pTemplate="caption">
-      <div class="flex justify-between">
+      <div class="flex items-center justify-between">
         <p-columnFilter
           type="text"
           field="search"
           [showMenu]="false"
           placeholder="Filter services"
         ></p-columnFilter>
+        <p-progressSpinner
+          class="h-8 w-8"
+          styleClass="!h-8 !w-8"
+          strokeWidth="6"
+          *ngIf="loading"
+        ></p-progressSpinner>
       </div>
     </ng-template>
     <ng-template pTemplate="header">
@@ -89,12 +105,7 @@ export class ServicesComponent {
   constructor(
     private api: MockService,
     private dialogService: DialogService,
-    private AppComponent: AppComponent
   ) {}
-  
-  ngOnInit(){
-    this.AppComponent.checkUserAccess();
-  }
 
   get(state: TableLazyLoadEvent) {
     this.loading = true

@@ -10,7 +10,6 @@ import { ButtonModule } from 'primeng/button'
 import { PaginatorModule } from 'primeng/paginator'
 import { ProductComponent } from './product.component'
 import { DynamicDialogDefaults } from '../../utils/defaults'
-import { AppComponent } from '../app.component'
 
 @Component({
   selector: 'app-products',
@@ -85,12 +84,7 @@ export class ProductsComponent {
   constructor(
     private api: MockService,
     private dialogService: DialogService,
-    private App:AppComponent
   ) {}
-
-  ngOnInit(){
-    this.App.checkUserAccess();
-  }
 
   getData(state: TableLazyLoadEvent) {
     this.loading = true

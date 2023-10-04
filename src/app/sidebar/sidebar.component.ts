@@ -1,5 +1,5 @@
-import { Component } from '@angular/core'
-import { NgForOf, NgIf } from '@angular/common'
+import { Component, Input } from '@angular/core'
+import { NgClass, NgForOf, NgIf } from '@angular/common'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { RouterLink, RouterLinkActive } from '@angular/router'
 import {
@@ -28,8 +28,21 @@ type MenuItem = Route | Title | Separator
 @Component({
   selector: 'app-sidebar',
   standalone: true,
+  imports: [
+    NgForOf,
+    FontAwesomeModule,
+    RouterLink,
+    RouterLinkActive,
+    NgIf,
+    InputNumberModule,
+    ButtonModule,
+    NgClass,
+  ],
   template: `
-    <div class="h-full w-64 shrink-0 overflow-y-auto bg-primary-dark py-2">
+    <div
+      class="h-full w-64 shrink-0 overflow-y-auto overflow-x-clip bg-primary-dark py-2"
+      *ngIf="!isCollapsed"
+    >
       <img alt="Pulsar logo" class="px-4" src="../../assets/logo.png" />
       <div class="p-inputgroup p-4">
         <p-inputNumber
@@ -44,9 +57,9 @@ type MenuItem = Route | Title | Separator
         <ng-container *ngFor="let item of items; let i = index">
           <li *ngIf="isRoute(item)">
             <a
-              class="flex w-full items-center px-4 py-2"
+              class="flex w-full items-center px-4 py-2 hover:bg-black/10"
               [routerLink]="item.link"
-              [routerLinkActive]="'bg-primary-darker'"
+              [routerLinkActive]="'!bg-primary-darker'"
             >
               <fa-icon
                 [icon]="item.icon"
@@ -63,17 +76,10 @@ type MenuItem = Route | Title | Separator
       </ul>
     </div>
   `,
-  imports: [
-    NgForOf,
-    FontAwesomeModule,
-    RouterLink,
-    RouterLinkActive,
-    NgIf,
-    InputNumberModule,
-    ButtonModule,
-  ],
 })
 export class SidebarComponent {
+  @Input() isCollapsed = false
+
   items: Array<MenuItem> = [
     {
       separator: true,

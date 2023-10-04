@@ -38,7 +38,9 @@ export class MockService {
   ) {
     const searchValue = (state.filters?.['search'] as FilterMetadata)?.['value']
     const sortField = state.sortField as string | undefined
-    let data = [...Array(128)].map((_, i) => factory(i + 1 + state.first!))
+    let data: T[] = [...Array(128)].map((_, i) => {
+      return factory(i + 1)
+    })
     if (searchValue)
       data = data.filter((row) =>
         Object.values(row).some((value) =>
@@ -70,14 +72,13 @@ export class MockService {
             },
           })
           subscriber.complete()
-          console.log(state)
         },
         Math.random() * 500 + 1000,
       )
     })
   }
 
-  getById<T extends object>(res: T) {
+  getById<T extends Record<string, any>>(res: T) {
     return new Observable<T>((subscriber) => {
       setTimeout(
         () => {

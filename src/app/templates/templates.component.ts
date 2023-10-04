@@ -8,7 +8,6 @@ import { DynamicDialogDefaults } from '../../utils/defaults'
 import { TableLazyLoadEvent, TableModule } from 'primeng/table'
 import { Template } from '../../api/mock.types'
 import { CardModule } from 'primeng/card'
-import { AppComponent } from '../app.component'
 
 @Component({
   selector: 'app-templates',
@@ -65,12 +64,7 @@ export class TemplatesComponent {
   constructor(
     private apiService: MockService,
     private dialogService: DialogService,
-    private AppComponent: AppComponent,
   ) {}
-
-  ngOnInit(){
-    this.AppComponent.checkUserAccess();
-  }
 
   get(state: TableLazyLoadEvent) {
     this.loading = true
