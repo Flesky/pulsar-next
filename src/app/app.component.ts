@@ -28,7 +28,7 @@ import { NgIf } from '@angular/common'
       class="absolute inset-0 flex h-full w-full"
     >
       <app-sidebar [isCollapsed]="isCollapsed" />
-      <div class="h-full grow overflow-y-auto bg-gray-50">
+      <div class="h-full shrink grow overflow-y-auto bg-gray-50">
         <div
           class="sticky top-0 z-50 flex h-14 w-full items-center justify-between bg-primary px-4"
         >
@@ -64,7 +64,7 @@ import { NgIf } from '@angular/common'
   `,
 })
 export class AppComponent implements OnInit {
-  name: string | undefined
+  name: string | undefined = 'Test'
   isCollapsed = false
 
   constructor(private oauthService: OAuthService) {}
@@ -97,10 +97,6 @@ export class AppComponent implements OnInit {
           this.oauthService.initCodeFlow()
         }
       })
-  }
-
-  login() {
-    this.oauthService.initCodeFlow()
   }
 
   items: MenuItem[] = [

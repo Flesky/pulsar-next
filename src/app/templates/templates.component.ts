@@ -7,53 +7,63 @@ import { ButtonModule } from 'primeng/button'
 import { DynamicDialogDefaults } from '../../utils/defaults'
 import { TableLazyLoadEvent, TableModule } from 'primeng/table'
 import { Template } from '../../api/mock.model'
-import { CardModule } from 'primeng/card'
+import { ProgressSpinnerModule } from 'primeng/progressspinner'
 
 @Component({
   selector: 'app-templates',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule, CardModule],
+  imports: [CommonModule, TableModule, ButtonModule, ProgressSpinnerModule],
   providers: [MockService, DialogService],
-  template: `
-    <p-table
-      [value]="data"
-      [loading]="loading"
-      [lazy]="true"
-      (onLazyLoad)="get($event)"
-      [paginator]="true"
-      [rows]="10"
-      [rowsPerPageOptions]="[10, 20, 50, 100]"
-      [totalRecords]="totalRecords"
-    >
-      <ng-template pTemplate="caption">
-        <div class="flex justify-between">
-          <p-columnFilter
-            type="text"
-            field="search"
-            [showMenu]="false"
-            placeholder="Filter templates"
-          ></p-columnFilter>
+  template: `<p-table
+    (onLazyLoad)="get($event)"
+    [paginator]="true"
+    [showJumpToPageDropdown]="true"
+    [rowsPerPageOptions]="[10, 20, 50, 100]"
+    [showPageLinks]="false"
+    [lazy]="true"
+    [loading]="loading"
+    [showLoader]="false"
+    [rowHover]="true"
+    [value]="data"
+    [rows]="10"
+    [totalRecords]="totalRecords"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex items-center justify-between">
+        <p-columnFilter
+          type="text"
+          field="search"
+          [showMenu]="false"
+          placeholder="Filter templates"
+        ></p-columnFilter>
+        <div class="flex items-center gap-4">
+          <p-progressSpinner
+            class="h-8 w-8"
+            styleClass="!h-8 !w-8"
+            strokeWidth="6"
+            *ngIf="loading"
+          ></p-progressSpinner>
           <button (click)="create()" pButton class="p-success">
             New template
           </button>
         </div>
-      </ng-template>
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Name</th>
-          <th>Action</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-row>
-        <tr>
-          <td>{{ row.name }}</td>
-          <td>
-            <button pButton (click)="edit(row)">Edit</button>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-  `,
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Name</th>
+        <th>Action</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td>{{ row.name }}</td>
+        <td>
+          <button pButton (click)="edit(row)">Edit</button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table> `,
 })
 export class TemplatesComponent {
   data: Template[] = []

@@ -23,17 +23,17 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner'
   ],
   providers: [MockService, DialogService],
   template: `<p-table
-    [value]="data"
-    [loading]="loading"
-    [lazy]="true"
     (onLazyLoad)="get($event)"
     [paginator]="true"
     [showJumpToPageDropdown]="true"
     [rowsPerPageOptions]="[10, 20, 50, 100]"
     [showPageLinks]="false"
-    [rows]="10"
-    [rowHover]="true"
+    [lazy]="true"
+    [loading]="loading"
     [showLoader]="false"
+    [rowHover]="true"
+    [value]="data"
+    [rows]="10"
     [totalRecords]="totalRecords"
   >
     <ng-template pTemplate="caption">
@@ -44,12 +44,14 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner'
           [showMenu]="false"
           placeholder="Filter services"
         ></p-columnFilter>
-        <p-progressSpinner
-          class="h-8 w-8"
-          styleClass="!h-8 !w-8"
-          strokeWidth="6"
-          *ngIf="loading"
-        ></p-progressSpinner>
+        <div class="flex items-center gap-4">
+          <p-progressSpinner
+            class="h-8 w-8"
+            styleClass="!h-8 !w-8"
+            strokeWidth="6"
+            *ngIf="loading"
+          ></p-progressSpinner>
+        </div>
       </div>
     </ng-template>
     <ng-template pTemplate="header">

@@ -7,7 +7,6 @@ import {
   faChessRook,
   faCircleArrowRight,
   faClipboardUser,
-  faCube,
   faFileExport,
   faGlobe,
   faHome,
@@ -40,7 +39,7 @@ type MenuItem = Route | Title | Separator
   ],
   template: `
     <div
-      class="h-full w-64 shrink-0 overflow-y-auto overflow-x-clip bg-primary-dark py-2"
+      class="h-full w-64 shrink-0 overflow-y-auto bg-primary-dark py-2 "
       *ngIf="!isCollapsed"
     >
       <img alt="Pulsar logo" class="px-4" src="../../assets/logo.png" />

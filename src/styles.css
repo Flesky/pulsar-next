@@ -1,12 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
 /* Created with designer.primeng.org */
-
 @import "assets/pulsar-theme.css";
 @import "primeng/resources/primeng.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 
 html {
   font-size: 14px;
@@ -37,6 +37,10 @@ dl {
 }
 dl > dt {
   @apply font-bold;
+}
+
+tr {
+  @apply cursor-pointer;
 }
 
 .dialog-form-grid {
