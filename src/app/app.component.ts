@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { RouterOutlet } from '@angular/router'
 import { SidebarComponent } from './sidebar/sidebar.component'
 import { ButtonModule } from 'primeng/button'
@@ -6,7 +6,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { faBars, faCaretDown, faUser } from '@fortawesome/free-solid-svg-icons'
 import { MenuModule } from 'primeng/menu'
 import { MenuItem } from 'primeng/api'
-import { OAuthService } from 'angular-oauth2-oidc'
+import { OAuthErrorEvent, OAuthService } from 'angular-oauth2-oidc'
 import { authCodeFlowConfig } from '../utils/auth'
 import { NgIf } from '@angular/common'
 
@@ -24,7 +24,7 @@ import { NgIf } from '@angular/common'
   providers: [OAuthService],
   template: `
     <div
-      *ngIf="username; else authenticating"
+      *ngIf="name; else authenticating"
       class="absolute inset-0 flex h-full w-full"
     >
       <app-sidebar [isCollapsed]="isCollapsed" />
@@ -34,14 +34,14 @@ import { NgIf } from '@angular/common'
         >
           <p-button (click)="isCollapsed = !isCollapsed">
             <ng-container #icon>
-              <fa-icon [icon]="faBars"></fa-icon
-            ></ng-container>
+              <fa-icon [icon]="faBars"></fa-icon>
+            </ng-container>
           </p-button>
           <p-button
             (click)="menu.toggle($event)"
             styleClass="p-button-text !text-white"
           >
-            {{ username }}
+            {{ name }}
 
             <div
               class="ml-2.5 flex h-10 w-10 items-center justify-center rounded-full bg-white"
@@ -59,16 +59,23 @@ import { NgIf } from '@angular/common'
     </div>
     <p-menu #menu [model]="items" [popup]="true"></p-menu>
     <ng-template #authenticating>
-      <div class="p-4">Authenticating...</div></ng-template
-    >
+      <p class="p-4">Authenticating...</p>
+    </ng-template>
   `,
 })
-export class AppComponent {
-  username: string | undefined
+export class AppComponent implements OnInit {
+  name: string | undefined
   isCollapsed = false
 
-  constructor(private oauthService: OAuthService) {
+  constructor(private oauthService: OAuthService) {}
+
+  ngOnInit() {
     this.oauthService.configure(authCodeFlowConfig)
+    this.oauthService.events.subscribe((event) => {
+      if (event instanceof OAuthErrorEvent) {
+        this.oauthService.initCodeFlow()
+      }
+    })
     this.oauthService
       .loadDiscoveryDocumentAndTryLogin({
         customHashFragment: window.location.search,
@@ -77,14 +84,23 @@ export class AppComponent {
         if (this.oauthService.hasValidAccessToken()) {
           this.oauthService.setupAutomaticSilentRefresh()
           this.oauthService.loadUserProfile().then((profile) => {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore Can't override type
-            this.username = profile['info']['preferred_username']
+            const { given_name, family_name, preferred_username } =
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore Can't override type
+              profile['info']
+            this.name =
+              given_name && family_name
+                ? `${given_name} ${family_name}`
+                : preferred_username
           })
         } else {
           this.oauthService.initCodeFlow()
         }
       })
+  }
+
+  login() {
+    this.oauthService.initCodeFlow()
   }
 
   items: MenuItem[] = [

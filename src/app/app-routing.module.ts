@@ -4,17 +4,12 @@ import { DashboardComponent } from './dashboard/dashboard.component'
 import { ServicesComponent } from './services/services.component'
 import { TemplatesComponent } from './templates/templates.component'
 import { TagsComponent } from './tags/tags.component'
-import { ProductsComponent } from './products/products.component'
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
     redirectTo: '/services',
-  },
-  {
-    path: 'products',
-    component: ProductsComponent,
   },
   {
     path: 'dashboard',

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { TabViewModule } from 'primeng/tabview'
 import { MockService } from '../../api/mock.service'
-import { Service } from '../../api/mock.types'
+import { Service } from '../../api/mock.model'
 import { DynamicDialogConfig } from 'primeng/dynamicdialog'
 
 @Component({

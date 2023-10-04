@@ -8,7 +8,7 @@ This project uses:
 - Angular 16.2.2
 - Angular Standalone Components
 - PrimeNG 16.3.1
-- Custom theme based on Bootstrap 4
+- Custom theme based on Bootstrap
 - Tailwind CSS
 - ESLint, Prettier for linting
 

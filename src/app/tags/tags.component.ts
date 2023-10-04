@@ -6,7 +6,7 @@ import { TagComponent } from './tag.component'
 import { ButtonModule } from 'primeng/button'
 import { DynamicDialogDefaults } from '../../utils/defaults'
 import { TableLazyLoadEvent, TableModule } from 'primeng/table'
-import { Tag } from '../../api/mock.types'
+import { Tag } from '../../api/mock.model'
 import { CardModule } from 'primeng/card'
 
 @Component({

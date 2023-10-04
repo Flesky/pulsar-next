@@ -85,17 +85,6 @@ export class SidebarComponent {
       separator: true,
     },
     {
-      title: 'Test Pages',
-    },
-    {
-      label: 'Products (external API)',
-      icon: faCube,
-      link: '/products',
-    },
-    {
-      separator: true,
-    },
-    {
       label: 'Dashboard',
       icon: faHome,
       link: '/dashboard',
