@@ -58,9 +58,7 @@ import { TableModule } from 'primeng/table'
     `,
   ],
   template: `
-    <h1 class="mt-4 text-center text-4xl font-semibold">
-      Whenever Communications
-    </h1>
+    <h1 class="mt-4 text-center text-4xl font-semibold">SMSG Communications</h1>
     <div class="mt-10 grid grid-cols-6 gap-x-4 gap-y-4 lg:grid-cols-12">
       <div class="card">
         <div class="card-header">
