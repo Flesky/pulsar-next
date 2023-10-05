@@ -63,10 +63,15 @@ import { TableModule } from 'primeng/table'
       <div class="card">
         <div class="card-header">
           <h2>Network Status</h2>
-          <button pButton class="flex items-center gap-2">
+          <a
+            href="https://www.pivotel.com.au/current-outages/"
+            target="_blank"
+            pButton
+            class="p-button-outlined flex items-center gap-2"
+          >
             <fa-icon class="text-lg" [icon]="faEye"></fa-icon>
-            Pivotel Outages
-          </button>
+            Outages
+          </a>
         </div>
         <div class="mt-6 grid grid-cols-4">
           <div *ngFor="let item of status.network" class="big-icon-with-text">
@@ -89,7 +94,7 @@ import { TableModule } from 'primeng/table'
           <button
             [routerLink]="'/services'"
             pButton
-            class="flex items-center gap-2"
+            class="p-button-outlined flex items-center gap-2"
           >
             <fa-icon class="text-lg" [icon]="faSatelliteDish"></fa-icon>
             View all
