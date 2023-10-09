@@ -5,10 +5,11 @@ import { ButtonModule } from 'primeng/button'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { faBars, faCaretDown, faUser } from '@fortawesome/free-solid-svg-icons'
 import { MenuModule } from 'primeng/menu'
-import { MenuItem } from 'primeng/api'
+import { MenuItem, MessageService } from 'primeng/api'
 import { OAuthErrorEvent, OAuthService } from 'angular-oauth2-oidc'
 import { authCodeFlowConfig } from '../utils/auth'
 import { NgIf } from '@angular/common'
+import { ToastModule } from 'primeng/toast'
 
 @Component({
   selector: 'app-root',
@@ -20,9 +21,11 @@ import { NgIf } from '@angular/common'
     FontAwesomeModule,
     MenuModule,
     NgIf,
+    ToastModule,
   ],
-  providers: [OAuthService],
+  providers: [OAuthService, MessageService],
   template: `
+    <p-toast></p-toast>
     <div
       *ngIf="name; else authenticating"
       class="absolute inset-0 flex h-full w-full"

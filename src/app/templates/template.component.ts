@@ -2,14 +2,12 @@ import { Component } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { InputTextModule } from 'primeng/inputtext'
 import { ButtonModule } from 'primeng/button'
-import {
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms'
+import { FormGroup, ReactiveFormsModule } from '@angular/forms'
 import { FieldComponent } from '../shared/form/field.component'
-import { DynamicDialogConfig } from 'primeng/dynamicdialog'
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog'
+import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core'
+import { ApiService } from '../../api/api.service'
+import { MessageService } from 'primeng/api'
 
 @Component({
   selector: 'app-new-template',
@@ -20,32 +18,64 @@ import { DynamicDialogConfig } from 'primeng/dynamicdialog'
     ButtonModule,
     ReactiveFormsModule,
     FieldComponent,
+    FormlyModule,
   ],
+  providers: [ApiService],
   template: ` <form
     [formGroup]="form"
     class="dialog-form"
-    (ngSubmit)="onSubmit()"
+    (ngSubmit)="submit()"
   >
-    <div class="dialog-form-grid">
-      <app-form-field for="name" label="Name" [message]="form.getError('name')">
-        <input pInputText formControlName="name" />
-      </app-form-field>
-    </div>
+    <formly-form [form]="form" [model]="model" [fields]="fields"></formly-form>
 
     <div class="dialog-form-footer">
-      <button pButton>Save</button>
+      <p-button type="submit" [loading]="loading">Save</p-button>
     </div>
   </form>`,
 })
 export class TemplateComponent {
-  form = new FormGroup({
-    name: new FormControl('', [Validators.required]),
-  })
-  constructor(private config: DynamicDialogConfig) {
-    if (config.data) this.form.setValue(config.data.form)
+  id: number | undefined
+  loading = false
+  refresh: (() => void) | undefined
+  form = new FormGroup({})
+  model = {
+    Name: '',
+  }
+  fields: FormlyFieldConfig[] = [
+    {
+      key: 'Name',
+      type: 'input',
+      props: {
+        label: 'Name',
+        placeholder: 'Enter name',
+        required: true,
+      },
+    },
+  ]
+
+  constructor(
+    config: DynamicDialogConfig,
+    private api: ApiService,
+    private messageService: MessageService,
+    private ref: DynamicDialogRef,
+  ) {
+    if (config.data) {
+      this.id = config.data.id
+      this.refresh = config.data.refresh
+      this.model = config.data.model
+    }
   }
 
-  onSubmit() {
-    console.log(this.form.value)
+  submit() {
+    this.loading = true
+    this.api.saveTemplate(this.form.value, this.id).subscribe(() => {
+      this.loading = false
+      this.refresh?.()
+      this.messageService.add({
+        severity: 'success',
+        summary: `Saved ${this.form.get('Name')?.value}`,
+      })
+      this.ref.close()
+    })
   }
 }
