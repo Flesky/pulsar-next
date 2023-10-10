@@ -10,6 +10,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner'
 import { ApiService } from '../../api/api.service'
 import { ConfirmationService, MessageService } from 'primeng/api'
 import { ConfirmPopupModule } from 'primeng/confirmpopup'
+import { TableComponent } from '../shared/table/table.component'
 
 @Component({
   selector: 'app-templates',
@@ -20,50 +21,24 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup'
     ButtonModule,
     ProgressSpinnerModule,
     ConfirmPopupModule,
+    TableComponent,
   ],
   providers: [ApiService, DialogService, ConfirmationService],
-  template: `<p-table
-      (onLazyLoad)="get($event)"
-      [paginator]="true"
-      [showJumpToPageDropdown]="true"
-      [rowsPerPageOptions]="[10, 20, 50, 100]"
-      [showPageLinks]="false"
-      [lazy]="true"
+  template: `<app-table
       [loading]="loading"
-      [showLoader]="false"
-      [rowHover]="true"
-      [value]="data"
-      [rows]="10"
+      [data]="data"
       [totalRecords]="totalRecords"
+      (get)="get($event)"
+      (create)="create()"
+      createTitle="template"
     >
-      <ng-template pTemplate="caption">
-        <div class="flex items-center justify-between">
-          <p-columnFilter
-            type="text"
-            field="search"
-            [showMenu]="false"
-            placeholder="Filter templates"
-          ></p-columnFilter>
-          <div class="flex items-center gap-4">
-            <p-progressSpinner
-              class="h-8 w-8"
-              styleClass="!h-8 !w-8"
-              strokeWidth="6"
-              *ngIf="loading"
-            ></p-progressSpinner>
-            <button (click)="create()" pButton class="p-success">
-              New template
-            </button>
-          </div>
-        </div>
-      </ng-template>
-      <ng-template pTemplate="header">
+      <ng-template #header>
         <tr>
           <th>Name</th>
-          <th>Action</th>
+          <th>Actions</th>
         </tr>
       </ng-template>
-      <ng-template pTemplate="body" let-row>
+      <ng-template #body let-row>
         <tr>
           <td>{{ row.Name }}</td>
           <td>
@@ -82,7 +57,7 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup'
           </td>
         </tr>
       </ng-template>
-    </p-table>
+    </app-table>
 
     <p-confirmPopup></p-confirmPopup> `,
 })
@@ -111,11 +86,6 @@ export class TemplatesComponent {
       this.totalRecords = filteredCount
       this.loading = false
     })
-  }
-
-  show(row: Template | undefined) {
-    !row ? this.create() : this.edit(row)
-    this.dialog?.onClose.subscribe(() => this.get())
   }
 
   create() {

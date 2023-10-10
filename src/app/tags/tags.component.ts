@@ -1,111 +1,107 @@
 import { Component } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { MockService } from '../../api/mock.service'
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog'
-import { TagComponent } from './tag.component'
 import { ButtonModule } from 'primeng/button'
-import { DynamicDialogDefaults } from '../../utils/defaults'
 import { TableLazyLoadEvent, TableModule } from 'primeng/table'
-import { Tag } from '../../api/mock.model'
+import { Template } from '../../api/api.model'
 import { ProgressSpinnerModule } from 'primeng/progressspinner'
+import { ApiService } from '../../api/api.service'
+import { ConfirmationService, MessageService } from 'primeng/api'
+import { ConfirmPopupModule } from 'primeng/confirmpopup'
+import { TableComponent } from '../shared/table/table.component'
 
 @Component({
-  selector: 'app-tags',
+  selector: 'app-templates',
   standalone: true,
   imports: [
     CommonModule,
     TableModule,
     ButtonModule,
     ProgressSpinnerModule,
-    ProgressSpinnerModule,
+    ConfirmPopupModule,
+    TableComponent,
   ],
-  providers: [MockService, DialogService],
-  template: `<p-table
-    (onLazyLoad)="get($event)"
-    [paginator]="true"
-    [showJumpToPageDropdown]="true"
-    [rowsPerPageOptions]="[10, 20, 50, 100]"
-    [showPageLinks]="false"
-    [lazy]="true"
-    [loading]="loading"
-    [showLoader]="false"
-    [rowHover]="true"
-    [value]="data"
-    [rows]="10"
-    [totalRecords]="totalRecords"
-  >
-    <ng-template pTemplate="caption">
-      <div class="flex items-center justify-between">
-        <p-columnFilter
-          type="text"
-          field="search"
-          [showMenu]="false"
-          placeholder="Filter tags"
-        ></p-columnFilter>
-        <div class="flex items-center gap-4">
-          <p-progressSpinner
-            class="h-8 w-8"
-            styleClass="!h-8 !w-8"
-            strokeWidth="6"
-            *ngIf="loading"
-          ></p-progressSpinner>
-          <button (click)="create()" pButton class="p-success">New tag</button>
-        </div>
-      </div>
-    </ng-template>
-    <ng-template pTemplate="header">
-      <tr>
-        <th>Name</th>
-        <th>Action</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-row>
-      <tr>
-        <td>{{ row.name }}</td>
-        <td>
-          <button pButton (click)="edit(row)">Edit</button>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table> `,
+  providers: [ApiService, DialogService, ConfirmationService],
+  template: `<app-table
+      [loading]="loading"
+      [data]="data"
+      [totalRecords]="totalRecords"
+      (get)="get($event)"
+    >
+      <ng-template #header>
+        <tr>
+          <th>Name</th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template #body let-row>
+        <tr>
+          <td>{{ row.Name }}</td>
+          <td>
+            <div class="row-actions">
+              <button class="p-button-outlined" pButton (click)="edit(row)">
+                Edit
+              </button>
+              <button
+                class="p-button-outlined p-button-danger"
+                pButton
+                (click)="delete(row)"
+              >
+                Delete
+              </button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </app-table>
+
+    <p-confirmPopup></p-confirmPopup> `,
 })
 export class TagsComponent {
-  data: Tag[] = []
+  lastState: TableLazyLoadEvent | undefined
+  data: Template[] = []
   totalRecords = 0
   loading = true
   dialog: DynamicDialogRef | undefined
 
   constructor(
-    private apiService: MockService,
+    private apiService: ApiService,
     private dialogService: DialogService,
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService,
   ) {}
 
-  get(state: TableLazyLoadEvent) {
+  get(state: TableLazyLoadEvent | undefined = undefined) {
+    if (state) this.lastState = state
+    state ||= this.lastState
     this.loading = true
-    this.apiService.getTags(state).subscribe((res) => {
-      this.data = res.data
-      this.totalRecords = res.pagination.total
+    this.apiService.getTags(state!).subscribe((res) => {
+      const { Tags, Summary } = res
+      const { filteredCount } = Summary
+      this.data = Tags
+      this.totalRecords = filteredCount
       this.loading = false
     })
   }
 
-  create() {
-    this.dialog = this.dialogService.open(TagComponent, {
-      header: 'Create tag',
-      ...DynamicDialogDefaults,
-    })
-  }
+  create() {}
 
-  edit(row: Tag) {
-    this.dialog = this.dialogService.open(TagComponent, {
-      data: {
-        id: row.id,
-        form: {
-          name: row.name,
-        },
+  edit(row: Template) {}
+
+  delete({ id, Name }: Template) {
+    this.confirmationService.confirm({
+      target: event!.target as EventTarget,
+      message: `Are you sure you want to delete ${Name}?`,
+      acceptButtonStyleClass: 'p-button-danger',
+      accept: () => {
+        this.apiService.deleteTemplate(id).subscribe(() => {
+          this.messageService.add({
+            severity: 'success',
+            summary: `Deleted ${Name}`,
+          })
+          this.get()
+        })
       },
-      header: 'Edit ' + row.name,
-      ...DynamicDialogDefaults,
     })
   }
 }

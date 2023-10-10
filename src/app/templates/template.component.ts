@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common'
 import { InputTextModule } from 'primeng/inputtext'
 import { ButtonModule } from 'primeng/button'
 import { FormGroup, ReactiveFormsModule } from '@angular/forms'
-import { FieldComponent } from '../shared/form/field.component'
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog'
 import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core'
 import { ApiService } from '../../api/api.service'
@@ -17,7 +16,6 @@ import { MessageService } from 'primeng/api'
     InputTextModule,
     ButtonModule,
     ReactiveFormsModule,
-    FieldComponent,
     FormlyModule,
   ],
   providers: [ApiService],

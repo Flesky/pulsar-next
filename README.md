@@ -5,11 +5,12 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 ## Stack
 
 This project uses:
-- Angular 16.2.2
-- Angular Standalone Components
-- PrimeNG 16.3.1
-- Custom theme based on Bootstrap
+- Angular 16.2.2 with Standalone Components
+- PrimeNG 16.3.1 with custom theme based on Bootstrap
+- Formly
 - Tailwind CSS
+- FontAwesome 6 icons
+- Chart.js
 - ESLint, Prettier for linting
 
 ## Development server
