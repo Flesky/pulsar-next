@@ -9,9 +9,11 @@ import { ApiService } from '../../api/api.service'
 import { ConfirmationService, MessageService } from 'primeng/api'
 import { ConfirmPopupModule } from 'primeng/confirmpopup'
 import { TableComponent } from '../shared/table/table.component'
+import { DynamicDialogDefaults } from '../../utils/defaults'
+import { TagComponent } from './tag.component'
 
 @Component({
-  selector: 'app-templates',
+  selector: 'app-tags',
   standalone: true,
   imports: [
     CommonModule,
@@ -22,11 +24,16 @@ import { TableComponent } from '../shared/table/table.component'
     TableComponent,
   ],
   providers: [ApiService, DialogService, ConfirmationService],
-  template: `<app-table
+  template: `
+    <p>Add/edit not working at the moment. Fixing.</p>
+
+    <app-table
       [loading]="loading"
       [data]="data"
       [totalRecords]="totalRecords"
       (get)="get($event)"
+      (create)="create()"
+      itemName="tag"
     >
       <ng-template #header>
         <tr>
@@ -55,7 +62,8 @@ import { TableComponent } from '../shared/table/table.component'
       </ng-template>
     </app-table>
 
-    <p-confirmPopup></p-confirmPopup> `,
+    <p-confirmPopup></p-confirmPopup>
+  `,
 })
 export class TagsComponent {
   lastState: TableLazyLoadEvent | undefined
@@ -84,9 +92,29 @@ export class TagsComponent {
     })
   }
 
-  create() {}
+  create() {
+    this.dialog = this.dialogService.open(TagComponent, {
+      data: {
+        refresh: () => this.get(),
+      },
+      header: 'Create tag',
+      ...DynamicDialogDefaults,
+    })
+  }
 
-  edit(row: Template) {}
+  edit(row: Template) {
+    this.dialog = this.dialogService.open(TagComponent, {
+      data: {
+        id: row.id,
+        refresh: () => this.get(),
+        model: {
+          Name: row.Name,
+        },
+      },
+      header: 'Edit ' + row.Name,
+      ...DynamicDialogDefaults,
+    })
+  }
 
   delete({ id, Name }: Template) {
     this.confirmationService.confirm({
@@ -94,7 +122,7 @@ export class TagsComponent {
       message: `Are you sure you want to delete ${Name}?`,
       acceptButtonStyleClass: 'p-button-danger',
       accept: () => {
-        this.apiService.deleteTemplate(id).subscribe(() => {
+        this.apiService.deleteTag(id).subscribe(() => {
           this.messageService.add({
             severity: 'success',
             summary: `Deleted ${Name}`,

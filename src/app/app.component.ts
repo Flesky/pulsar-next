@@ -42,12 +42,12 @@ import { ToastModule } from 'primeng/toast'
           </p-button>
           <p-button
             (click)="menu.toggle($event)"
-            styleClass="p-button-text !text-white"
+            styleClass="p-button-text flex !text-white"
           >
             {{ name }}
 
             <div
-              class="ml-2.5 flex h-10 w-10 items-center justify-center rounded-full bg-white"
+              class="ml-2.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white"
             >
               <fa-icon class="text-lg text-gray-500" [icon]="faUser"></fa-icon>
             </div>
@@ -55,7 +55,7 @@ import { ToastModule } from 'primeng/toast'
           </p-button>
         </div>
 
-        <div class="p-8">
+        <div class="md:p-8">
           <router-outlet></router-outlet>
         </div>
       </div>

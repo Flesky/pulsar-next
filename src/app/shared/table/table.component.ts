@@ -55,7 +55,7 @@ import { ButtonModule } from 'primeng/button'
 
             <ng-template #defaultAction>
               <button (click)="create.emit()" pButton class="p-success">
-                New template
+                New {{ itemName }}
               </button>
             </ng-template>
             <ng-container
@@ -82,7 +82,7 @@ export class TableComponent implements OnInit {
   @Input({ required: true }) totalRecords = 0
   @Input({ required: true }) loading = false
   @Output() get = new EventEmitter<TableLazyLoadEvent>()
-  @Input() createTitle = 'item'
+  @Input() itemName = 'item'
   @Output() create = new EventEmitter<void>()
 
   @ContentChild('action') action: TemplateRef<never> | undefined

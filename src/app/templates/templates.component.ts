@@ -30,7 +30,7 @@ import { TableComponent } from '../shared/table/table.component'
       [totalRecords]="totalRecords"
       (get)="get($event)"
       (create)="create()"
-      createTitle="template"
+      itemName="template"
     >
       <ng-template #header>
         <tr>

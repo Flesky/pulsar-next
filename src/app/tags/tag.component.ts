@@ -9,7 +9,7 @@ import { ApiService } from '../../api/api.service'
 import { MessageService } from 'primeng/api'
 
 @Component({
-  selector: 'app-new-template',
+  selector: 'app-new-tag',
   standalone: true,
   imports: [
     CommonModule,
@@ -31,7 +31,7 @@ import { MessageService } from 'primeng/api'
     </div>
   </form>`,
 })
-export class TemplateComponent {
+export class TagComponent {
   id: number | undefined
   loading = false
   refresh: (() => void) | undefined
@@ -67,7 +67,7 @@ export class TemplateComponent {
   submit() {
     if (this.form.valid) {
       this.loading = true
-      this.api.saveTemplate(this.form.value, this.id).subscribe(() => {
+      this.api.saveTag(this.form.value, this.id).subscribe(() => {
         this.loading = false
         this.refresh?.()
         this.messageService.add({
