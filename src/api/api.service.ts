@@ -1,7 +1,13 @@
 import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { TableLazyLoadEvent } from 'primeng/table'
-import { Form, GetTags, GetTemplates, Id } from './api.model'
+import {
+  Form,
+  GetFirewallProfiles,
+  GetTags,
+  GetTemplates,
+  IdOrUndefined,
+} from './api.model'
 
 @Injectable()
 export class ApiService {
@@ -42,25 +48,46 @@ export class ApiService {
       this.buildPaginatedQuery('templates', state),
     )
   }
-  saveTemplate(form: Form, id: Id) {
+
+  saveTemplate(form: Form, id: IdOrUndefined) {
     return !id
       ? this.http.post(this.buildQuery('templates'), form)
-      : this.http.put(`${this.buildQuery('templates')}/${id}`, form)
+      : this.http.put(`${this.buildQuery(`templates/${id}`)}`, form)
   }
-  deleteTemplate(id: Id) {
-    return this.http.delete(`${this.buildQuery('templates')}/${id}`)
+
+  deleteTemplate(id: number) {
+    return this.http.delete(`${this.buildQuery(`templates/${id}`)}`)
   }
 
   // Tags
   getTags(state: TableLazyLoadEvent) {
     return this.http.get<GetTags>(this.buildPaginatedQuery('tags', state))
   }
-  saveTag(form: Form, id: Id) {
+
+  saveTag(form: Form, id: IdOrUndefined) {
     return !id
       ? this.http.post(this.buildQuery('tags'), form)
-      : this.http.put(`${this.buildQuery('tags')}/${id}`, form)
+      : this.http.put(`${this.buildQuery(`tags/${id}`)}`, form)
   }
-  deleteTag(id: Id) {
-    return this.http.delete(`${this.buildQuery('tags')}/${id}`)
+
+  deleteTag(id: number) {
+    return this.http.delete(`${this.buildQuery(`tags/${id}`)}`)
+  }
+
+  // Firewall Profiles
+  getFirewallProfiles(state: TableLazyLoadEvent) {
+    return this.http.get<GetFirewallProfiles>(
+      this.buildPaginatedQuery('Firewall/Profiles', state),
+    )
+  }
+
+  saveFirewallProfile(form: Form, id: IdOrUndefined) {
+    return !id
+      ? this.http.post(this.buildQuery('Firewall/Profiles'), form)
+      : this.http.put(`${this.buildQuery(`Firewall/Profiles/${id}`)}`, form)
+  }
+
+  deleteFirewallProfile(id: string) {
+    return this.http.delete(`${this.buildQuery('Firewall/Profiles')}/${id}`)
   }
 }

@@ -4,6 +4,7 @@ import { DashboardComponent } from './dashboard/dashboard.component'
 import { ServicesComponent } from './services/services.component'
 import { TemplatesComponent } from './templates/templates.component'
 import { TagsComponent } from './tags/tags.component'
+import { FirewallComponent } from './firewall/firewall.component'
 
 const routes: Routes = [
   {
@@ -26,6 +27,10 @@ const routes: Routes = [
   {
     path: 'tags',
     component: TagsComponent,
+  },
+  {
+    path: 'firewall',
+    component: FirewallComponent,
   },
 ]
 

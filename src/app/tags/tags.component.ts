@@ -94,16 +94,17 @@ export class TagsComponent {
 
   create() {
     this.dialog = this.dialogService.open(TagComponent, {
+      ...DynamicDialogDefaults,
       data: {
         refresh: () => this.get(),
       },
       header: 'Create tag',
-      ...DynamicDialogDefaults,
     })
   }
 
   edit(row: Template) {
     this.dialog = this.dialogService.open(TagComponent, {
+      ...DynamicDialogDefaults,
       data: {
         id: row.id,
         refresh: () => this.get(),
@@ -112,7 +113,6 @@ export class TagsComponent {
         },
       },
       header: 'Edit ' + row.Name,
-      ...DynamicDialogDefaults,
     })
   }
 

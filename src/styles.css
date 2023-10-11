@@ -33,6 +33,9 @@ formly-group {
 formly-field {
   @apply col-span-full;
 }
+formly-field-primeng-radio {
+  @apply flex gap-4;
+}
 
 /*.p-datatable-thead > tr > th {*/
 /*  @apply !bg-primary !text-white;*/

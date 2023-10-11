@@ -9,8 +9,10 @@ import { provideAnimations } from '@angular/platform-browser/animations'
 import { BrowserModule, bootstrapApplication } from '@angular/platform-browser'
 import { provideOAuthClient } from 'angular-oauth2-oidc'
 import { FormlyPrimeNGModule } from '@ngx-formly/primeng'
-import { ReactiveFormsModule } from '@angular/forms'
+import { AbstractControl, ReactiveFormsModule } from '@angular/forms'
 import { FormlyModule } from '@ngx-formly/core'
+import { ArrayTypeComponent } from './app/shared/form/array.component'
+import { ObjectTypeComponent } from './app/shared/form/object.component'
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -21,8 +23,29 @@ bootstrapApplication(AppComponent, {
       ReactiveFormsModule,
       FormlyPrimeNGModule,
       FormlyModule.forRoot({
+        validators: [
+          {
+            name: 'range',
+            validation: (control: AbstractControl) => {
+              return !control.value || /^[0-9]+(-[0-9]+)?$/.test(control.value)
+                ? null
+                : { range: true }
+            },
+          },
+        ],
         validationMessages: [
           { name: 'required', message: 'This field is required' },
+          { name: 'range', message: 'This field must be a number or a range' },
+        ],
+        types: [
+          {
+            name: 'array',
+            component: ArrayTypeComponent,
+          },
+          {
+            name: 'object',
+            component: ObjectTypeComponent,
+          },
         ],
       }),
     ),

@@ -1,8 +1,10 @@
 # Pulsar
 
+This application is a re-engineering of the Pulsar Portal project using the latest version of Angular and modern Angular libraries and frameworks. This codebase is developed with maintainability in mind, employing best practices and design patterns to ensure that the code is easy to understand and extend.
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.2.
 
-## Stack
+## Features
 
 This project uses:
 - Angular 16.2.2 with Standalone Components

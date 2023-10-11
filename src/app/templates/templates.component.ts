@@ -90,16 +90,17 @@ export class TemplatesComponent {
 
   create() {
     this.dialog = this.dialogService.open(TemplateComponent, {
+      ...DynamicDialogDefaults,
       data: {
         refresh: () => this.get(),
       },
       header: 'Create template',
-      ...DynamicDialogDefaults,
     })
   }
 
   edit(row: Template) {
     this.dialog = this.dialogService.open(TemplateComponent, {
+      ...DynamicDialogDefaults,
       data: {
         id: row.id,
         refresh: () => this.get(),
@@ -108,7 +109,6 @@ export class TemplatesComponent {
         },
       },
       header: 'Edit ' + row.Name,
-      ...DynamicDialogDefaults,
     })
   }
 
