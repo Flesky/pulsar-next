@@ -62,7 +62,7 @@ const presetOptions = [
   ].sort((a, b) => a.label.localeCompare(b.label)),
 ]
 const protocolOptions = [
-  { label: 'ANY', value: null },
+  { label: 'ANY', value: 'custom' },
   ...[
     { label: 'IP', value: 0 },
     { label: 'ICMP', value: 1 },
@@ -203,13 +203,58 @@ const protocolOptions = [
     { label: 'WESP', value: 141 },
     { label: 'ROHC', value: 142 },
     { label: 'PFSYNC', value: 240 },
-  ]
-    .sort((a, b) => a.label.localeCompare(b.label))
-    .map(({ label, value }) => ({
-      label,
-      value: value !== null ? String(value) : null,
-    })),
+  ].sort((a, b) => a.label.localeCompare(b.label)),
 ]
+const presetBindings: { [key: string]: { protocol: number; port: number } } = {
+  http: {
+    protocol: 6,
+    port: 80,
+  },
+  https: {
+    protocol: 6,
+    port: 443,
+  },
+  'http-udp': {
+    protocol: 17,
+    port: 80,
+  },
+  'https-udp': {
+    protocol: 17,
+    port: 443,
+  },
+  ftp: {
+    protocol: 6,
+    port: 21,
+  },
+  ssh: {
+    protocol: 6,
+    port: 22,
+  },
+  telnet: {
+    protocol: 6,
+    port: 23,
+  },
+  pop3: {
+    protocol: 6,
+    port: 110,
+  },
+  smtp: {
+    protocol: 6,
+    port: 25,
+  },
+  ntp: {
+    protocol: 17,
+    port: 123,
+  },
+  snmp: {
+    protocol: 17,
+    port: 161,
+  },
+  sip: {
+    protocol: 17,
+    port: 5060,
+  },
+}
 
 @Component({
   selector: 'app-new-profile',
@@ -239,26 +284,7 @@ export class ProfileComponent {
   loading = false
   refresh: (() => void) | undefined
   form = new FormGroup({})
-  model: {
-    Name: string
-    Description: string
-    OutboundDefault: string
-    OutboundExceptions: Array<{
-      OutboundPreset: string
-      OutboundProtocol: string
-      OutboundPortRange: string
-      OutboundIPPrefix: string
-      OutboundDescription: string
-    }>
-    InboundDefault: string
-    InboundExceptions: Array<{
-      InboundPreset: string
-      InboundProtocol: string
-      InboundPortRange: string
-      InboundIPPrefix: string
-      InboundDescription: string
-    }>
-  } = {
+  model: any = {
     Name: '',
     Description: '',
     OutboundDefault: 'deny',
@@ -323,6 +349,22 @@ export class ProfileComponent {
                   label: 'Preset Services',
                   options: presetOptions,
                   required: true,
+                },
+                expressions: {
+                  'model.OutboundProtocol': (field) => {
+                    if (field.formControl?.value !== 'custom') {
+                      const preset = presetBindings[field.formControl?.value]
+                      return preset.protocol
+                    }
+                    return null
+                  },
+                  'model.OutboundPortRange': (field) => {
+                    if (field.formControl?.value !== 'custom') {
+                      const preset = presetBindings[field.formControl?.value]
+                      return preset.port
+                    }
+                    return null
+                  },
                 },
               },
               {
@@ -410,6 +452,30 @@ export class ProfileComponent {
                   options: presetOptions,
                   required: true,
                 },
+                expressions: {
+                  // 'model.InboundPreset': (field) => {
+                  //   if (field.formControl?.value !== 'custom') {
+                  //     console.log(field.parent)
+                  //     const preset = presetBindings[field.formControl?.value]
+                  //     return preset.protocol
+                  //   }
+                  //   return null
+                  // },
+                  'model.InboundProtocol': (field) => {
+                    if (field.formControl?.value !== 'custom') {
+                      const preset = presetBindings[field.formControl?.value]
+                      return preset.protocol
+                    }
+                    return null
+                  },
+                  'model.InboundPortRange': (field) => {
+                    if (field.formControl?.value !== 'custom') {
+                      const preset = presetBindings[field.formControl?.value]
+                      return preset.port
+                    }
+                    return null
+                  },
+                },
               },
               {
                 key: 'InboundProtocol',
@@ -451,6 +517,7 @@ export class ProfileComponent {
                 defaultValue: '',
                 props: {
                   label: 'Description',
+                  required: true,
                 },
               },
             ],
@@ -471,16 +538,20 @@ export class ProfileComponent {
       this.refresh = config.data.refresh
       if (config.data.model) {
         this.model = config.data.model
-        this.model.OutboundExceptions.forEach((item) => {
-          item['OutboundIPPrefix'] = item['OutboundIPPrefix']
-            .split(',')
-            .join('\n')
-        })
-        this.model.InboundExceptions.forEach((item) => {
-          item['InboundIPPrefix'] = item['InboundIPPrefix']
-            .split(',')
-            .join('\n')
-        })
+        this.model.OutboundExceptions.forEach(
+          (item: { OutboundIPPrefix: string }) => {
+            item['OutboundIPPrefix'] = item['OutboundIPPrefix']
+              .split(',')
+              .join('\n')
+          },
+        )
+        this.model.InboundExceptions.forEach(
+          (item: { InboundIPPrefix: string }) => {
+            item['InboundIPPrefix'] = item['InboundIPPrefix']
+              .split(',')
+              .join('\n')
+          },
+        )
       }
     }
   }

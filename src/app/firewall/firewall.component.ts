@@ -158,10 +158,7 @@ export class FirewallComponent {
           OutboundDefault: row.outbound.defaultAction,
           OutboundExceptions: row.outbound.exceptions.map((item) => {
             return {
-              OutboundPreset:
-                item.parsedProtocol === 'unknown'
-                  ? 'custom'
-                  : item.parsedProtocol,
+              OutboundPreset: item.parsedProtocol,
               OutboundProtocol: item.protocol,
               OutboundPortRange: item.displayPort,
               OutboundIPPrefix: item.remoteAddresses.join('\n'),
@@ -171,10 +168,7 @@ export class FirewallComponent {
           InboundDefault: row.inbound.defaultAction,
           InboundExceptions: row.inbound.exceptions.map((item) => {
             return {
-              InboundPreset:
-                item.parsedProtocol === 'unknown'
-                  ? 'custom'
-                  : item.parsedProtocol,
+              InboundPreset: item.parsedProtocol,
               InboundProtocol: item.protocol,
               InboundPortRange: item.displayPort,
               InboundIPPrefix: item.remoteAddresses.join('\n'),
