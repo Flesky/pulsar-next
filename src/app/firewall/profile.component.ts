@@ -308,7 +308,6 @@ export class ProfileComponent {
       props: {
         label: 'Description',
         placeholder: 'Enter description',
-        required: true,
       },
     },
     {
