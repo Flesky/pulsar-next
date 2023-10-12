@@ -45,7 +45,7 @@ export interface Root {
       [totalRecords]="totalRecords"
       (get)="get($event)"
       (create)="create()"
-      itemName="profile"
+      itemName="firewall profile"
     >
       <ng-template #header>
         <tr>
@@ -68,7 +68,7 @@ export interface Root {
               {{ row.outbound.defaultAction.toUpperCase() }}
             </p-tag>
             {{ row.outbound.exceptions.length }} exception{{
-              row.outbound.exceptions.length > 1 ? 's' : ''
+              row.outbound.exceptions.length !== 1 ? 's' : ''
             }}
           </td>
           <td>
@@ -81,7 +81,7 @@ export interface Root {
               {{ row.inbound.defaultAction.toUpperCase() }}
             </p-tag>
             {{ row.inbound.exceptions.length }} exception{{
-              row.inbound.exceptions.length > 1 ? 's' : ''
+              row.inbound.exceptions.length !== 1 ? 's' : ''
             }}
           </td>
           <td>

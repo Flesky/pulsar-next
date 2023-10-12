@@ -325,8 +325,8 @@ export class ProfileComponent {
           props: {
             required: true,
             options: [
-              { label: 'Block all', value: 'deny' },
-              { label: 'Allow all', value: 'allow' },
+              { label: 'Block all outgoing traffic', value: 'deny' },
+              { label: 'Allow all outgoing traffic', value: 'allow' },
             ],
           },
         },
@@ -383,7 +383,6 @@ export class ProfileComponent {
                 className: 'col-span-2',
                 props: {
                   label: 'Port (Range)',
-                  required: true,
                 },
                 validators: {
                   validation: ['range'],
@@ -396,7 +395,6 @@ export class ProfileComponent {
                 props: {
                   label: 'IP (Subnet) or FQDN',
                   autoResize: true,
-                  required: true,
                 },
               },
               {
@@ -427,8 +425,8 @@ export class ProfileComponent {
           props: {
             required: true,
             options: [
-              { label: 'Block all', value: 'deny' },
-              { label: 'Allow all', value: 'allow' },
+              { label: 'Block all outgoing traffic', value: 'deny' },
+              { label: 'Allow all outgoing traffic', value: 'allow' },
             ],
           },
         },
@@ -493,7 +491,6 @@ export class ProfileComponent {
                 className: 'col-span-2',
                 props: {
                   label: 'Port (Range)',
-                  required: true,
                 },
                 validators: {
                   validation: ['range'],
@@ -507,7 +504,6 @@ export class ProfileComponent {
                 props: {
                   label: 'IP (Subnet) or FQDN',
                   autoResize: true,
-                  required: true,
                 },
               },
               {
@@ -517,7 +513,6 @@ export class ProfileComponent {
                 defaultValue: '',
                 props: {
                   label: 'Description',
-                  required: true,
                 },
               },
             ],
