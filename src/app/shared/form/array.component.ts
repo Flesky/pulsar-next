@@ -11,11 +11,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
   imports: [ButtonModule, NgForOf, NgIf, FormlyModule, FontAwesomeModule],
   template: `
     <div class="flex flex-col">
-      <small
-        class="text-danger"
-        *ngIf="showError && formControl.errors"
-      ></small>
-
       <ng-container *ngIf="field.fieldGroup?.length">
         <div class="flex flex-col gap-4">
           <div
@@ -44,6 +39,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
       >
         <fa-icon [icon]="faAdd"></fa-icon> Add
       </button>
+
+      <small class="text-danger" *ngIf="showError && formControl.errors">
+        <formly-validation-message [field]="field"></formly-validation-message>
+      </small>
     </div>
   `,
 })

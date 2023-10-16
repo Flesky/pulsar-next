@@ -17,7 +17,7 @@ body {
 h1 {
   @apply text-3xl font-bold;
 }
-input {
+input, textarea {
    @apply w-full;
  }
 dl {
@@ -61,7 +61,7 @@ formly-field-primeng-radio {
   @apply min-h-[240px];
 }
 .dialog-form-footer {
-  @apply flex w-full justify-end;
+  @apply flex w-full justify-end mt-24;
 }
 .row-actions {
   @apply flex gap-2;

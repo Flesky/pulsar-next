@@ -8,8 +8,7 @@ import { NgForOf, NgIf } from '@angular/common'
   imports: [FormlyModule, NgForOf, NgIf],
   template: `
     <div>
-      <small class="text-danger" *ngIf="showError && formControl.errors">
-        >
+      <small class="text-danger">
         <formly-validation-message [field]="field"></formly-validation-message>
       </small>
       <div class="grid grow grid-cols-6 gap-3 md:grid-cols-12">

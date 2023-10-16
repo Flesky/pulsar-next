@@ -32,8 +32,24 @@ bootstrapApplication(AppComponent, {
                 : { range: true }
             },
           },
+          {
+            name: 'hostname',
+            validation: (control: AbstractControl) => {
+              return !control.value ||
+                /^((?!-))(xn--)?[a-z0-9][a-z0-9-_]{0,61}[a-z0-9]{0,1}\.(xn--)?([a-z0-9-]{1,61}|[a-z0-9-]{1,30}\.[a-z]{2,})$/i.test(
+                  control.value,
+                )
+                ? null
+                : { hostname: true }
+            },
+          },
         ],
         validationMessages: [
+          { name: 'hostname', message: 'This field must be a valid host name' },
+          {
+            name: 'minlength',
+            message: 'This field must be at least 3 characters',
+          },
           { name: 'required', message: 'This field is required' },
           { name: 'range', message: 'This field must be a number or a range' },
         ],

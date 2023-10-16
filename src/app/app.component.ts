@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, isDevMode, OnInit } from '@angular/core'
 import { RouterOutlet } from '@angular/router'
 import { SidebarComponent } from './sidebar/sidebar.component'
 import { ButtonModule } from 'primeng/button'
@@ -27,7 +27,7 @@ import { ToastModule } from 'primeng/toast'
   template: `
     <p-toast></p-toast>
     <div
-      *ngIf="name; else authenticating"
+      *ngIf="name; else authPending"
       class="absolute inset-0 flex h-full w-full"
     >
       <app-sidebar [isCollapsed]="isCollapsed" />
@@ -61,7 +61,7 @@ import { ToastModule } from 'primeng/toast'
       </div>
     </div>
     <p-menu #menu [model]="items" [popup]="true"></p-menu>
-    <ng-template #authenticating>
+    <ng-template #authPending>
       <p class="p-4">Authenticating...</p>
     </ng-template>
   `,
@@ -95,6 +95,8 @@ export class AppComponent implements OnInit {
               given_name && family_name
                 ? `${given_name} ${family_name}`
                 : preferred_username
+
+            if (isDevMode()) console.log(this.oauthService.getIdToken())
           })
         } else {
           this.oauthService.initCodeFlow()

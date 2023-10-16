@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http'
 import { TableLazyLoadEvent } from 'primeng/table'
 import {
   Form,
+  GetDomainFilters,
   GetFirewallProfiles,
   GetTags,
   GetTemplates,
@@ -90,5 +91,22 @@ export class ApiService {
 
   deleteFirewallProfile(id: string) {
     return this.http.delete(`${this.buildQuery('Firewall/Profiles')}/${id}`)
+  }
+
+  // Domain Filters
+  getDomainFilters(state: TableLazyLoadEvent) {
+    return this.http.get<GetDomainFilters>(
+      this.buildPaginatedQuery('DomainFilter/Profiles', state),
+    )
+  }
+
+  saveDomainFilter(form: Form, id: IdOrUndefined) {
+    return !id
+      ? this.http.post(this.buildQuery('DomainFilter/Profiles'), form)
+      : this.http.put(`${this.buildQuery(`DomainFilter/Profiles/${id}`)}`, form)
+  }
+
+  deleteDomainFilter(id: string) {
+    return this.http.delete(`${this.buildQuery('DomainFilter/Profiles')}/${id}`)
   }
 }

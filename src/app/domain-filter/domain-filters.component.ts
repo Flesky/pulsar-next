@@ -4,14 +4,14 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog'
 import { ButtonModule } from 'primeng/button'
 import { DynamicDialogDefaults } from '../../utils/defaults'
 import { TableLazyLoadEvent, TableModule } from 'primeng/table'
-import { FirewallProfile } from '../../api/api.model'
+import { DomainFilter } from '../../api/api.model'
 import { ProgressSpinnerModule } from 'primeng/progressspinner'
 import { ApiService } from '../../api/api.service'
 import { ConfirmationService, MessageService } from 'primeng/api'
 import { ConfirmPopupModule } from 'primeng/confirmpopup'
 import { TableComponent } from '../shared/table/table.component'
 import { TagModule } from 'primeng/tag'
-import { ProfileComponent } from './profile.component'
+import { DomainFilterComponent } from './domain-filter.component'
 
 export interface Root {
   label: string
@@ -26,7 +26,7 @@ export interface Root {
 }
 
 @Component({
-  selector: 'app-firewall',
+  selector: 'app-domain-filters',
   standalone: true,
   imports: [
     CommonModule,
@@ -45,45 +45,19 @@ export interface Root {
       [totalRecords]="totalRecords"
       (get)="get($event)"
       (create)="create()"
-      itemName="firewall profile"
+      itemName="domain filter"
     >
       <ng-template #header>
         <tr>
           <th>Name</th>
-          <th>Outbound</th>
-          <th>Inbound</th>
+          <th>Domains</th>
           <th>Actions</th>
         </tr>
       </ng-template>
       <ng-template #body let-row>
         <tr>
           <td>{{ row.label }}</td>
-          <td>
-            <p-tag
-              styleClass="leading-none mr-1"
-              [severity]="
-                row.outbound.defaultAction === 'allow' ? 'success' : 'danger'
-              "
-            >
-              {{ row.outbound.defaultAction.toUpperCase() }}
-            </p-tag>
-            {{ row.outbound.exceptions.length }} exception{{
-              row.outbound.exceptions.length !== 1 ? 's' : ''
-            }}
-          </td>
-          <td>
-            <p-tag
-              styleClass="leading-none mr-1"
-              [severity]="
-                row.inbound.defaultAction === 'allow' ? 'success' : 'danger'
-              "
-            >
-              {{ row.inbound.defaultAction.toUpperCase() }}
-            </p-tag>
-            {{ row.inbound.exceptions.length }} exception{{
-              row.inbound.exceptions.length !== 1 ? 's' : ''
-            }}
-          </td>
+          <td>{{ row.domains.length }} rules</td>
           <td>
             <div class="row-actions">
               <!--              <button pButton (click)="view(row)">View</button>-->
@@ -106,9 +80,9 @@ export interface Root {
     <p-confirmPopup></p-confirmPopup>
   `,
 })
-export class FirewallComponent {
+export class DomainFiltersComponent {
   lastState: TableLazyLoadEvent | undefined
-  data: FirewallProfile[] = []
+  data: DomainFilter[] = []
   totalRecords = 0
   loading = true
   dialog: DynamicDialogRef | undefined
@@ -124,7 +98,7 @@ export class FirewallComponent {
     if (state) this.lastState = state
     state ||= this.lastState
     this.loading = true
-    this.apiService.getFirewallProfiles(state!).subscribe((res) => {
+    this.apiService.getDomainFilters(state!).subscribe((res) => {
       const { Profiles, Summary } = res
       const { filteredCount } = Summary
       this.data = Profiles
@@ -136,18 +110,17 @@ export class FirewallComponent {
   // view(row: Template) {}
 
   create() {
-    this.dialog = this.dialogService.open(ProfileComponent, {
+    this.dialog = this.dialogService.open(DomainFilterComponent, {
       ...DynamicDialogDefaults,
       data: {
         refresh: () => this.get(),
       },
-      header: 'Create firewall profile',
-      width: '1200px',
+      header: 'Create domain filter',
     })
   }
 
-  edit(row: FirewallProfile) {
-    this.dialog = this.dialogService.open(ProfileComponent, {
+  edit(row: DomainFilter) {
+    this.dialog = this.dialogService.open(DomainFilterComponent, {
       ...DynamicDialogDefaults,
       data: {
         id: row.uid,
@@ -155,29 +128,7 @@ export class FirewallComponent {
         model: {
           Name: row.label,
           Description: row.customData.description,
-          OutboundDefault: row.outbound.defaultAction,
-          OutboundExceptions: row.outbound.exceptions.map((item) => {
-            return {
-              OutboundPreset:
-                item.parsedProtocol === 'unknown'
-                  ? 'custom'
-                  : item.parsedProtocol,
-              OutboundProtocol: item.protocol,
-              OutboundPortRange: item.displayPort || 0,
-              OutboundIPPrefix: item.remoteAddresses.join('\n'),
-              OutboundDescription: item.label || ' ',
-            }
-          }),
-          InboundDefault: row.inbound.defaultAction,
-          InboundExceptions: row.inbound.exceptions.map((item) => {
-            return {
-              InboundPreset: item.parsedProtocol,
-              InboundProtocol: item.protocol,
-              InboundPortRange: item.displayPort || 0,
-              InboundIPPrefix: item.remoteAddresses.join('\n'),
-              InboundDescription: item.label || ' ',
-            }
-          }),
+          Domains: row.domains.map((d) => ({ Hostname: d })),
         },
       },
       header: 'Edit ' + row.label,
@@ -185,13 +136,13 @@ export class FirewallComponent {
     })
   }
 
-  delete({ uid, label }: FirewallProfile) {
+  delete({ uid, label }: DomainFilter) {
     this.confirmationService.confirm({
       target: event!.target as EventTarget,
       message: `Are you sure you want to delete ${label}?`,
       acceptButtonStyleClass: 'p-button-danger',
       accept: () => {
-        this.apiService.deleteFirewallProfile(uid).subscribe(() => {
+        this.apiService.deleteDomainFilter(uid).subscribe(() => {
           this.messageService.add({
             severity: 'success',
             summary: `Deleted ${label}`,

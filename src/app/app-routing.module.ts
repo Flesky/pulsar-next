@@ -5,6 +5,7 @@ import { ServicesComponent } from './services/services.component'
 import { TemplatesComponent } from './templates/templates.component'
 import { TagsComponent } from './tags/tags.component'
 import { FirewallComponent } from './firewall/firewall.component'
+import { DomainFiltersComponent } from './domain-filter/domain-filters.component'
 
 const routes: Routes = [
   {
@@ -31,6 +32,10 @@ const routes: Routes = [
   {
     path: 'firewall',
     component: FirewallComponent,
+  },
+  {
+    path: 'domain-filter',
+    component: DomainFiltersComponent,
   },
 ]
 

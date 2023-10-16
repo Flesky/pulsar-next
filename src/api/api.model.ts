@@ -27,18 +27,16 @@ export interface Tag extends GetItem {
   Hex: string
 }
 
-interface FirewallPermissionException {
-  label: string
-  protocol: number
-  destPortRange: { from: number; toInclusive: number }
-  remoteAddresses: string[]
-  displayPort: number
-  parsedProtocol: string
-}
-
 interface FirewallPermission {
   defaultAction: string
-  exceptions: FirewallPermissionException[]
+  exceptions: {
+    label: string
+    protocol: number
+    destPortRange: { from: number; toInclusive: number }
+    remoteAddresses: string[]
+    displayPort: number
+    parsedProtocol: string
+  }[]
 }
 
 export interface FirewallProfile {
@@ -50,6 +48,22 @@ export interface FirewallProfile {
   lastModificationDate: string
   inbound: FirewallPermission
   outbound: FirewallPermission
+}
+
+export interface DomainFilter {
+  uid: string
+  label: string
+  customData: {
+    description: string
+    AccountNumber: string
+  }
+  removed: boolean
+  creationDate: string
+  lastModificationDate: string
+  domains: Array<string>
+  filterLists: Array<any>
+  version: number
+  firewallVersion: number
 }
 
 interface GetResponse {
@@ -66,4 +80,8 @@ export interface GetTags extends GetResponse {
 
 export interface GetFirewallProfiles extends GetResponse {
   Profiles: FirewallProfile[]
+}
+
+export interface GetDomainFilters extends GetResponse {
+  Profiles: DomainFilter[]
 }

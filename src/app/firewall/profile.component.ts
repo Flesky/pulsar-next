@@ -62,7 +62,7 @@ const presetOptions = [
   ].sort((a, b) => a.label.localeCompare(b.label)),
 ]
 const protocolOptions = [
-  { label: 'ANY', value: 'custom' },
+  { label: 'Any', value: 'custom' },
   ...[
     { label: 'IP', value: 0 },
     { label: 'ICMP', value: 1 },
@@ -251,10 +251,123 @@ const presetBindings: { [key: string]: { protocol: number; port: number } } = {
     port: 161,
   },
   sip: {
-    protocol: 17,
+    protocol: 6,
     port: 5060,
   },
 }
+const exceptionsSchema = (type: 'Inbound' | 'Outbound'): FormlyFieldConfig => ({
+  fieldGroup: [
+    {
+      template: `
+        <hr class="my-2"/>
+        <h3 class="font-semibold text-lg mt-4">${type} traffic rules</h3>
+      `,
+    },
+    {
+      key: `${type}Default`,
+      type: 'radio',
+      props: {
+        required: true,
+        options: [
+          { label: 'Block all traffic', value: 'deny' },
+          { label: 'Allow all traffic', value: 'allow' },
+        ],
+      },
+    },
+    {
+      template: `<h4 class="font-semibold mt-2">Exceptions</h4>`,
+    },
+    {
+      key: `${type}Exceptions`,
+      type: 'array',
+      fieldArray: {
+        key: `${type}Exceptions`,
+        type: 'object',
+        fieldGroup: [
+          {
+            key: `${type}Preset`,
+            type: 'select',
+            className: 'col-span-2',
+            defaultValue: 'custom',
+            props: {
+              label: 'Preset Services',
+              options: presetOptions,
+              required: true,
+            },
+            expressions: {
+              // 'model.`${type}Preset`': (field) => {
+              //   if (field.formControl?.value !== 'custom') {
+              //     console.log(field.parent)
+              //     const preset = presetBindings[field.formControl?.value]
+              //     return preset.protocol
+              //   }
+              //   return null
+              // },
+              [`model.${type}Protocol`]: (field) => {
+                if (field.formControl?.value !== 'custom') {
+                  const preset = presetBindings[field.formControl?.value]
+                  return preset.protocol
+                }
+                return null
+              },
+              [`model.${type}PortRange`]: (field) => {
+                if (field.formControl?.value !== 'custom') {
+                  const preset = presetBindings[field.formControl?.value]
+                  return preset.port
+                }
+                return null
+              },
+            },
+          },
+          {
+            key: `${type}Protocol`,
+            type: 'select',
+            className: 'col-span-2',
+            defaultValue: null,
+            props: {
+              label: 'Protocol',
+              options: protocolOptions,
+            },
+          },
+          {
+            key: `${type}PortRange`,
+            type: 'input',
+            className: 'col-span-2',
+            defaultValue: '0',
+            props: {
+              label: 'Port (Range)',
+              required: true,
+            },
+            validators: {
+              validation: ['range'],
+            },
+          },
+          {
+            key: `${type}IPPrefix`,
+            type: 'textarea',
+            className: 'col-span-3',
+            defaultValue: '0.0.0.0/0',
+            props: {
+              label: 'IP (Subnet) or FQDN',
+              autoResize: true,
+              required: true,
+            },
+          },
+          {
+            key: `${type}Description`,
+            type: 'input',
+            className: 'col-span-3',
+            defaultValue: '',
+            props: {
+              label: 'Description',
+              required: true,
+            },
+          },
+        ],
+      },
+    },
+  ],
+})
 
 @Component({
   selector: 'app-new-profile',
@@ -274,7 +387,7 @@ const presetBindings: { [key: string]: { protocol: number; port: number } } = {
   >
     <formly-form [form]="form" [fields]="fields" [model]="model"></formly-form>
 
-    <div class="dialog-form-footer mt-48">
+    <div class="dialog-form-footer">
       <p-button type="submit" [loading]="loading">Save</p-button>
     </div>
   </form>`,
@@ -304,221 +417,14 @@ export class ProfileComponent {
     },
     {
       key: 'Description',
-      type: 'input',
+      type: 'textarea',
       props: {
         label: 'Description',
         placeholder: 'Enter description',
       },
     },
-    {
-      fieldGroup: [
-        {
-          template: `
-            <hr class="my-2"/>
-            <h3 class="font-semibold text-lg mt-4">Outbound traffic rules</h3>
-      `,
-        },
-        {
-          key: 'OutboundDefault',
-          type: 'radio',
-          props: {
-            required: true,
-            options: [
-              { label: 'Block all outgoing traffic', value: 'deny' },
-              { label: 'Allow all outgoing traffic', value: 'allow' },
-            ],
-          },
-        },
-        {
-          template: `<h4 class="font-semibold mt-2">Exceptions</h4>`,
-        },
-        {
-          key: 'OutboundExceptions',
-          type: 'array',
-          fieldArray: {
-            key: 'OutboundExceptions',
-            type: 'object',
-            fieldGroup: [
-              {
-                key: 'OutboundPreset',
-                type: 'select',
-                className: 'col-span-2',
-                defaultValue: 'custom',
-                props: {
-                  label: 'Preset Services',
-                  options: presetOptions,
-                  required: true,
-                },
-                expressions: {
-                  'model.OutboundProtocol': (field) => {
-                    if (field.formControl?.value !== 'custom') {
-                      const preset = presetBindings[field.formControl?.value]
-                      return preset.protocol
-                    }
-                    return null
-                  },
-                  'model.OutboundPortRange': (field) => {
-                    if (field.formControl?.value !== 'custom') {
-                      const preset = presetBindings[field.formControl?.value]
-                      return preset.port
-                    }
-                    return null
-                  },
-                },
-              },
-              {
-                key: 'OutboundProtocol',
-                type: 'select',
-                className: 'col-span-2',
-                defaultValue: null,
-                props: {
-                  label: 'Protocol',
-                  options: protocolOptions,
-                },
-              },
-              {
-                key: 'OutboundPortRange',
-                type: 'input',
-                className: 'col-span-2',
-                props: {
-                  label: 'Port (Range)',
-                },
-                validators: {
-                  validation: ['range'],
-                },
-              },
-              {
-                key: 'OutboundIPPrefix',
-                type: 'textarea',
-                className: 'col-span-3',
-                props: {
-                  label: 'IP (Subnet) or FQDN',
-                  autoResize: true,
-                },
-              },
-              {
-                key: 'OutboundDescription',
-                type: 'input',
-                className: 'col-span-3',
-                props: {
-                  label: 'Description',
-                },
-              },
-            ],
-          },
-        },
-      ],
-    },
-
-    {
-      fieldGroup: [
-        {
-          template: `
-            <hr class="my-2"/>
-            <h3 class="font-semibold text-lg mt-4">Inbound traffic rules</h3>
-          `,
-        },
-        {
-          key: 'InboundDefault',
-          type: 'radio',
-          props: {
-            required: true,
-            options: [
-              { label: 'Block all outgoing traffic', value: 'deny' },
-              { label: 'Allow all outgoing traffic', value: 'allow' },
-            ],
-          },
-        },
-        {
-          template: `<h4 class="font-semibold mt-2">Exceptions</h4>`,
-        },
-        {
-          key: 'InboundExceptions',
-          type: 'array',
-          fieldArray: {
-            key: 'InboundExceptions',
-            type: 'object',
-            fieldGroup: [
-              {
-                key: 'InboundPreset',
-                type: 'select',
-                className: 'col-span-2',
-                defaultValue: 'custom',
-                props: {
-                  label: 'Preset Services',
-                  options: presetOptions,
-                  required: true,
-                },
-                expressions: {
-                  // 'model.InboundPreset': (field) => {
-                  //   if (field.formControl?.value !== 'custom') {
-                  //     console.log(field.parent)
-                  //     const preset = presetBindings[field.formControl?.value]
-                  //     return preset.protocol
-                  //   }
-                  //   return null
-                  // },
-                  'model.InboundProtocol': (field) => {
-                    if (field.formControl?.value !== 'custom') {
-                      const preset = presetBindings[field.formControl?.value]
-                      return preset.protocol
-                    }
-                    return null
-                  },
-                  'model.InboundPortRange': (field) => {
-                    if (field.formControl?.value !== 'custom') {
-                      const preset = presetBindings[field.formControl?.value]
-                      return preset.port
-                    }
-                    return null
-                  },
-                },
-              },
-              {
-                key: 'InboundProtocol',
-                type: 'select',
-                className: 'col-span-2',
-                defaultValue: null,
-                props: {
-                  label: 'Protocol',
-                  options: protocolOptions,
-                },
-              },
-              {
-                key: 'InboundPortRange',
-                type: 'input',
-                className: 'col-span-2',
-                props: {
-                  label: 'Port (Range)',
-                },
-                validators: {
-                  validation: ['range'],
-                },
-              },
-              {
-                key: 'InboundIPPrefix',
-                type: 'textarea',
-                className: 'col-span-3',
-                defaultValue: '0.0.0.0/0',
-                props: {
-                  label: 'IP (Subnet) or FQDN',
-                  autoResize: true,
-                },
-              },
-              {
-                key: 'InboundDescription',
-                type: 'input',
-                className: 'col-span-3',
-                defaultValue: '',
-                props: {
-                  label: 'Description',
-                },
-              },
-            ],
-          },
-        },
-      ],
-    },
+    { ...exceptionsSchema('Outbound') },
+    { ...exceptionsSchema('Inbound') },
   ]
 
   constructor(
@@ -553,15 +459,20 @@ export class ProfileComponent {
   submit() {
     if (this.form.valid) {
       this.loading = true
-      this.api.saveFirewallProfile(this.form.value, this.id).subscribe(() => {
-        this.loading = false
-        this.refresh?.()
-        this.messageService.add({
-          severity: 'success',
-          summary: `Saved ${this.form.get('Name')?.value}`,
-        })
-        this.ref.close()
-      })
+      this.api.saveFirewallProfile(this.form.value, this.id).subscribe(
+        () => {
+          this.refresh?.()
+          this.messageService.add({
+            severity: 'success',
+            summary: `Saved ${this.form.get('Name')?.value}`,
+          })
+          this.ref.close()
+        },
+        () => {},
+        () => {
+          this.loading = false
+        },
+      )
     }
   }
 }
