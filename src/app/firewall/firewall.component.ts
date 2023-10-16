@@ -125,9 +125,9 @@ export class FirewallComponent {
     state ||= this.lastState
     this.loading = true
     this.apiService.getFirewallProfiles(state!).subscribe((res) => {
-      const { Profile, Summary } = res
+      const { Profiles, Summary } = res
       const { filteredCount } = Summary
-      this.data = Profile
+      this.data = Profiles
       this.totalRecords = filteredCount
       this.loading = false
     })

@@ -51,6 +51,11 @@ bootstrapApplication(AppComponent, {
     ),
     provideAnimations(),
     provideHttpClient(withInterceptorsFromDi()),
-    provideOAuthClient(),
+    provideOAuthClient({
+      resourceServer: {
+        allowedUrls: ['https://pulsarapi.passcess.net'],
+        sendAccessToken: true,
+      },
+    }),
   ],
 }).catch((err) => console.error(err))

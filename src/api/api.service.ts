@@ -11,6 +11,7 @@ import {
 
 @Injectable()
 export class ApiService {
+  // Remember to also change the URL in main.ts
   apiUrl = 'https://pulsarapi.passcess.net'
   accountNumber = 'AC123456'
 

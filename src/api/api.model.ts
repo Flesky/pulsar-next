@@ -65,5 +65,5 @@ export interface GetTags extends GetResponse {
 }
 
 export interface GetFirewallProfiles extends GetResponse {
-  Profile: FirewallProfile[]
+  Profiles: FirewallProfile[]
 }

@@ -39,6 +39,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
         class="mt-0 flex w-full items-center justify-center gap-2"
         [class.!mt-4]="field.fieldGroup?.length"
         pButton
+        type="button"
         (click)="add()"
       >
         <fa-icon [icon]="faAdd"></fa-icon> Add
