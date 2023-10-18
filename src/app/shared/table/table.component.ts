@@ -7,10 +7,17 @@ import {
   Output,
   TemplateRef,
 } from '@angular/core'
-import { NgIf, NgTemplateOutlet } from '@angular/common'
+import { NgForOf, NgIf, NgTemplateOutlet } from '@angular/common'
 import { ProgressSpinnerModule } from 'primeng/progressspinner'
 import { TableLazyLoadEvent, TableModule } from 'primeng/table'
 import { ButtonModule } from 'primeng/button'
+
+export type TableColumn =
+  | {
+      name: string
+      sortKey?: string
+    }
+  | string
 
 @Component({
   selector: 'app-table',
@@ -21,6 +28,7 @@ import { ButtonModule } from 'primeng/button'
     NgIf,
     ButtonModule,
     NgTemplateOutlet,
+    NgForOf,
   ],
   template: `
     <p-table
@@ -67,18 +75,31 @@ import { ButtonModule } from 'primeng/button'
         </div>
       </ng-template>
       <ng-template pTemplate="header">
-        <ng-container *ngTemplateOutlet="header"></ng-container>
+        <tr>
+          <th
+            *ngFor="let column of columns"
+            [pSortableColumn]="sortKey(column)"
+          >
+            {{ columnName(column) }}
+            <p-sortIcon
+              *ngIf="!!sortKey(column)"
+              [field]="columnName(column)"
+            ></p-sortIcon>
+          </th>
+        </tr>
+        <!--        <ng-container *ngTemplateOutlet="header"></ng-container>-->
       </ng-template>
       <ng-template pTemplate="body" let-row>
         <ng-container *ngTemplateOutlet="body; context: { $implicit: row }">
-          ></ng-container
-        >
+          >
+        </ng-container>
       </ng-template>
     </p-table>
   `,
 })
 export class TableComponent implements OnInit {
   @Input({ required: true }) data: any[] = []
+  @Input({ required: true }) columns: TableColumn[] = []
   @Input({ required: true }) totalRecords = 0
   @Input({ required: true }) loading = false
   @Output() get = new EventEmitter<TableLazyLoadEvent>()
@@ -92,5 +113,12 @@ export class TableComponent implements OnInit {
   ngOnInit() {
     if (!this.get.observed)
       throw new Error('TableComponent requires a get listener')
+  }
+
+  columnName(column: TableColumn) {
+    return typeof column === 'object' ? column.name : column
+  }
+  sortKey(column: TableColumn) {
+    return typeof column === 'object' ? column?.sortKey : undefined
   }
 }

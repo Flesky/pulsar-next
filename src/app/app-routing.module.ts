@@ -6,6 +6,7 @@ import { TemplatesComponent } from './templates/templates.component'
 import { TagsComponent } from './tags/tags.component'
 import { FirewallComponent } from './firewall/firewall.component'
 import { DomainFiltersComponent } from './domain-filter/domain-filters.component'
+import { ActionLogComponent } from './action-log/action-log.component'
 
 const routes: Routes = [
   {
@@ -36,6 +37,10 @@ const routes: Routes = [
   {
     path: 'domain-filter',
     component: DomainFiltersComponent,
+  },
+  {
+    path: 'action-log',
+    component: ActionLogComponent,
   },
 ]
 

@@ -27,17 +27,18 @@ import { TableComponent } from '../shared/table/table.component'
   template: `<app-table
       [loading]="loading"
       [data]="data"
+      [columns]="[{ name: 'Name', sortKey: 'name' }, 'Actions']"
       [totalRecords]="totalRecords"
       (get)="get($event)"
       (create)="create()"
       itemName="template"
     >
-      <ng-template #header>
-        <tr>
-          <th>Name</th>
-          <th>Actions</th>
-        </tr>
-      </ng-template>
+      <!--      <ng-template #header>-->
+      <!--        <tr>-->
+      <!--          <th>Name</th>-->
+      <!--          <th>Actions</th>-->
+      <!--        </tr>-->
+      <!--      </ng-template>-->
       <ng-template #body let-row>
         <tr>
           <td>{{ row.Name }}</td>

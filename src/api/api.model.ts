@@ -66,6 +66,21 @@ export interface DomainFilter {
   firewallVersion: number
 }
 
+export interface Activity {
+  id: number
+  accountNum: string
+  data: string
+  groupID: any
+  operation: string
+  profileID: any
+  serviceID: any
+  status: string
+  userID: string
+  uID: string
+  created_at: string
+  updated_at: string
+}
+
 interface GetResponse {
   Summary: GetSummary
 }
@@ -84,4 +99,8 @@ export interface GetFirewallProfiles extends GetResponse {
 
 export interface GetDomainFilters extends GetResponse {
   Profiles: DomainFilter[]
+}
+
+export interface GetActionLog extends GetResponse {
+  Activities: Activity[]
 }

@@ -43,18 +43,16 @@ export interface Root {
       [loading]="loading"
       [data]="data"
       [totalRecords]="totalRecords"
+      [columns]="[
+        { name: 'Name' },
+        { name: 'Outbound' },
+        { name: 'Inbound' },
+        'Actions'
+      ]"
       (get)="get($event)"
       (create)="create()"
       itemName="firewall profile"
     >
-      <ng-template #header>
-        <tr>
-          <th>Name</th>
-          <th>Outbound</th>
-          <th>Inbound</th>
-          <th>Actions</th>
-        </tr>
-      </ng-template>
       <ng-template #body let-row>
         <tr>
           <td>{{ row.label }}</td>
@@ -165,7 +163,7 @@ export class FirewallComponent {
               OutboundProtocol: item.protocol,
               OutboundPortRange: item.displayPort || 0,
               OutboundIPPrefix: item.remoteAddresses.join('\n'),
-              OutboundDescription: item.label || ' ',
+              OutboundDescription: item.label,
             }
           }),
           InboundDefault: row.inbound.defaultAction,
@@ -175,7 +173,7 @@ export class FirewallComponent {
               InboundProtocol: item.protocol,
               InboundPortRange: item.displayPort || 0,
               InboundIPPrefix: item.remoteAddresses.join('\n'),
-              InboundDescription: item.label || ' ',
+              InboundDescription: item.label,
             }
           }),
         },

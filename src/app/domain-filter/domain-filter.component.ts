@@ -61,7 +61,6 @@ export class DomainFilterComponent {
       props: {
         label: 'Description',
         placeholder: 'Enter description',
-        required: true,
       },
     },
     {

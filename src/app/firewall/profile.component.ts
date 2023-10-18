@@ -360,7 +360,6 @@ const exceptionsSchema = (type: 'Inbound' | 'Outbound'): FormlyFieldConfig => ({
             defaultValue: '',
             props: {
               label: 'Description',
-              required: true,
             },
           },
         ],

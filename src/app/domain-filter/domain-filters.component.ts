@@ -43,17 +43,11 @@ export interface Root {
       [loading]="loading"
       [data]="data"
       [totalRecords]="totalRecords"
+      [columns]="[{ name: 'Name' }, { name: 'Domains' }, 'Actions']"
       (get)="get($event)"
       (create)="create()"
       itemName="domain filter"
     >
-      <ng-template #header>
-        <tr>
-          <th>Name</th>
-          <th>Domains</th>
-          <th>Actions</th>
-        </tr>
-      </ng-template>
       <ng-template #body let-row>
         <tr>
           <td>{{ row.label }}</td>
