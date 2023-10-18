@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http'
 import { TableLazyLoadEvent } from 'primeng/table'
 import {
   Form,
+  GetActionLog,
   GetDomainFilters,
   GetFirewallProfiles,
   GetTags,
@@ -38,17 +39,22 @@ export class ApiService {
     return `${this.apiUrl}/api/${this.accountNumber}/${query}`
   }
 
-  buildPaginatedQuery(query: string, state: TableLazyLoadEvent) {
+  buildGetQuery(query: string, state: TableLazyLoadEvent) {
     // rows = page size, first / rows = page number
+    console.log(state)
     const page = state.first! / state.rows! + 1
-    return `${this.buildQuery(query)}?page_size=${state.rows}&page=${page}`
+    return `${this.buildQuery(query)}?page_size=${state.rows}&page=${page}${
+      state.sortField
+        ? `&sort=${state.sortField}&order=${
+            state.sortOrder! > 0 ? 'asc' : 'desc'
+          }`
+        : ''
+    }`
   }
 
   // Templates
   getTemplates(state: TableLazyLoadEvent) {
-    return this.http.get<GetTemplates>(
-      this.buildPaginatedQuery('templates', state),
-    )
+    return this.http.get<GetTemplates>(this.buildGetQuery('templates', state))
   }
 
   saveTemplate(form: Form, id: IdOrUndefined) {
@@ -63,7 +69,7 @@ export class ApiService {
 
   // Tags
   getTags(state: TableLazyLoadEvent) {
-    return this.http.get<GetTags>(this.buildPaginatedQuery('tags', state))
+    return this.http.get<GetTags>(this.buildGetQuery('tags', state))
   }
 
   saveTag(form: Form, id: IdOrUndefined) {
@@ -79,7 +85,7 @@ export class ApiService {
   // Firewall Profiles
   getFirewallProfiles(state: TableLazyLoadEvent) {
     return this.http.get<GetFirewallProfiles>(
-      this.buildPaginatedQuery('Firewall/Profiles', state),
+      this.buildGetQuery('Firewall/Profiles', state),
     )
   }
 
@@ -96,7 +102,7 @@ export class ApiService {
   // Domain Filters
   getDomainFilters(state: TableLazyLoadEvent) {
     return this.http.get<GetDomainFilters>(
-      this.buildPaginatedQuery('DomainFilter/Profiles', state),
+      this.buildGetQuery('DomainFilter/Profiles', state),
     )
   }
 
@@ -108,5 +114,10 @@ export class ApiService {
 
   deleteDomainFilter(id: string) {
     return this.http.delete(`${this.buildQuery('DomainFilter/Profiles')}/${id}`)
+  }
+
+  // Action log
+  getActionLog(state: TableLazyLoadEvent) {
+    return this.http.get<GetActionLog>(this.buildGetQuery('Activities', state))
   }
 }

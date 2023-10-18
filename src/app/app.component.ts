@@ -96,7 +96,8 @@ export class AppComponent implements OnInit {
                 ? `${given_name} ${family_name}`
                 : preferred_username
 
-            if (isDevMode()) console.log(this.oauthService.getIdToken())
+            if (isDevMode())
+              console.log('Bearer ' + this.oauthService.getIdToken())
           })
         } else {
           this.oauthService.initCodeFlow()

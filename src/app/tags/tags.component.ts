@@ -31,6 +31,7 @@ import { TagComponent } from './tag.component'
       [loading]="loading"
       [data]="data"
       [totalRecords]="totalRecords"
+      [columns]="[{ name: 'Name' }, 'Actions']"
       (get)="get($event)"
       (create)="create()"
       itemName="tag"
