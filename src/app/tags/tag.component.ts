@@ -49,6 +49,15 @@ export class TagComponent {
         required: true,
       },
     },
+    {
+      key: 'Hex',
+      type: 'color',
+      defaultValue: '#f44336',
+      props: {
+        label: 'Color',
+        required: true,
+      },
+    },
   ]
 
   constructor(

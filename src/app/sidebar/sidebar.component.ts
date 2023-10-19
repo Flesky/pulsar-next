@@ -3,6 +3,7 @@ import { NgClass, NgForOf, NgIf } from '@angular/common'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { RouterLink, RouterLinkActive } from '@angular/router'
 import {
+  faArrowUpRightFromSquare,
   faBell,
   faChessRook,
   faCircleArrowRight,
@@ -19,7 +20,12 @@ import { IconDefinition } from '@fortawesome/free-brands-svg-icons'
 import { InputNumberModule } from 'primeng/inputnumber'
 import { ButtonModule } from 'primeng/button'
 
-type Route = { label: string; icon: IconDefinition; link: string }
+type Route = {
+  label: string
+  icon: IconDefinition
+  external?: boolean
+  link: string
+}
 type Title = { title: string }
 type Separator = { separator: true }
 type MenuItem = Route | Title | Separator
@@ -56,6 +62,7 @@ type MenuItem = Route | Title | Separator
         <ng-container *ngFor="let item of items; let i = index">
           <li *ngIf="isRoute(item)">
             <a
+              *ngIf="!item.external"
               class="flex w-full items-center px-4 py-2 hover:bg-black/10"
               [routerLink]="item.link"
               [routerLinkActive]="'!bg-primary-darker'"
@@ -66,6 +73,23 @@ type MenuItem = Route | Title | Separator
               ></fa-icon>
               <span>{{ item.label }}</span></a
             >
+            <a
+              *ngIf="item.external"
+              class="flex w-full items-center px-4 py-2 hover:bg-black/10"
+              target="_blank"
+              [href]="item.link"
+            >
+              <fa-icon
+                [icon]="item.icon"
+                class="mr-3 block w-5 text-center"
+              ></fa-icon>
+              <span class="mr-2">{{ item.label }}</span>
+
+              <fa-icon
+                [icon]="faArrowUpRightFromSquare"
+                class="block text-center text-gray-400"
+              ></fa-icon>
+            </a>
           </li>
           <li class="px-4 pb-2 pt-3 font-medium" *ngIf="isTitle(item)">
             {{ item.title }}
@@ -143,7 +167,8 @@ export class SidebarComponent {
     {
       label: 'Users',
       icon: faUsers,
-      link: '/users',
+      external: true,
+      link: 'https://auth.passcess.net/auth/admin/master/console/#/realms/master/users',
     },
   ]
 
@@ -159,4 +184,5 @@ export class SidebarComponent {
   }
 
   protected readonly faCircleArrowRight = faCircleArrowRight
+  protected readonly faArrowUpRightFromSquare = faArrowUpRightFromSquare
 }

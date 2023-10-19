@@ -25,8 +25,6 @@ import { TagComponent } from './tag.component'
   ],
   providers: [ApiService, DialogService, ConfirmationService],
   template: `
-    <p>Add/edit not working at the moment. Fixing.</p>
-
     <app-table
       [loading]="loading"
       [data]="data"
@@ -44,7 +42,14 @@ import { TagComponent } from './tag.component'
       </ng-template>
       <ng-template #body let-row>
         <tr>
-          <td>{{ row.Name }}</td>
+          <td>
+            <div
+              [style.background-color]="row.Hex"
+              class="w-max rounded px-2 py-0.5"
+            >
+              {{ row.Name }}
+            </div>
+          </td>
           <td>
             <div class="row-actions">
               <button class="p-button-outlined" pButton (click)="edit(row)">

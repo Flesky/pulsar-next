@@ -13,6 +13,7 @@ import { AbstractControl, ReactiveFormsModule } from '@angular/forms'
 import { FormlyModule } from '@ngx-formly/core'
 import { ArrayTypeComponent } from './app/shared/form/array.component'
 import { ObjectTypeComponent } from './app/shared/form/object.component'
+import { ColorPickerComponent } from './app/shared/form/color-picker.component'
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -53,6 +54,10 @@ bootstrapApplication(AppComponent, {
           {
             name: 'array',
             component: ArrayTypeComponent,
+          },
+          {
+            name: 'color',
+            component: ColorPickerComponent,
           },
           {
             name: 'object',
