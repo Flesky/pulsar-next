@@ -10,6 +10,7 @@ import {
   GetTemplates,
   IdOrUndefined,
 } from './api.model'
+import { FilterMetadata } from 'primeng/api'
 
 @Injectable()
 export class ApiService {
@@ -42,6 +43,7 @@ export class ApiService {
   buildGetQuery(query: string, state: TableLazyLoadEvent) {
     // rows = page size, first / rows = page number
     console.log(state)
+    const searchValue = (state.filters?.['search'] as FilterMetadata)?.['value']
     const page = state.first! / state.rows! + 1
     return `${this.buildQuery(query)}?page_size=${state.rows}&page=${page}${
       state.sortField
@@ -49,7 +51,7 @@ export class ApiService {
             state.sortOrder! > 0 ? 'asc' : 'desc'
           }`
         : ''
-    }`
+    }${searchValue ? `&search=${searchValue}` : ''}`
   }
 
   // Templates
