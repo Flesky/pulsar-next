@@ -16,8 +16,8 @@ import { ColorEvent } from 'ngx-color'
         [color]="formControl.value"
         (onChangeComplete)="updateColor($event)"
         [colors]="[
-          '#000000',
           '#8D8D8D',
+          '#000000',
           '#E5484D',
           '#D6409F',
           '#8E4EC6',
