@@ -2,12 +2,11 @@ import { Component } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog'
 import { ButtonModule } from 'primeng/button'
-import { TableLazyLoadEvent, TableModule } from 'primeng/table'
-import { Activity, Template } from '../../api/api.model'
+import { TableLazyLoadEvent } from 'primeng/table'
+import { Activity } from '../../api/api.model'
 import { ProgressSpinnerModule } from 'primeng/progressspinner'
 import { ApiService } from '../../api/api.service'
-import { ConfirmationService, MessageService } from 'primeng/api'
-import { ConfirmPopupModule } from 'primeng/confirmpopup'
+import { ConfirmationService } from 'primeng/api'
 import { TableComponent } from '../shared/table/table.component'
 
 @Component({
@@ -18,7 +17,11 @@ import { TableComponent } from '../shared/table/table.component'
   template: `<app-table
     [loading]="loading"
     [data]="data"
-    [columns]="[{ name: 'Name' }, 'Operation', 'Timestamp']"
+    [columns]="[
+      { name: 'User', sortKey: 'userID' },
+      { name: 'Operation', sortKey: 'operation' },
+      { name: 'Timestamp', sortKey: 'created_at' }
+    ]"
     [totalRecords]="totalRecords"
     (get)="get($event)"
   >

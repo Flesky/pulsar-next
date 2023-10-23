@@ -29,7 +29,7 @@ import { TagComponent } from './tag.component'
       [loading]="loading"
       [data]="data"
       [totalRecords]="totalRecords"
-      [columns]="[{ name: 'Name' }, 'Actions']"
+      [columns]="[{ name: 'Name', sortKey: 'Name' }, 'Actions']"
       (get)="get($event)"
       (create)="create()"
       itemName="tag"
@@ -45,7 +45,7 @@ import { TagComponent } from './tag.component'
           <td>
             <div
               [style.background-color]="row.Hex"
-              class="w-max rounded px-2 py-0.5"
+              class="w-max rounded px-2.5 py-1 font-semibold text-white"
             >
               {{ row.Name }}
             </div>

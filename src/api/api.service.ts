@@ -11,14 +11,17 @@ import {
   IdOrUndefined,
 } from './api.model'
 import { FilterMetadata } from 'primeng/api'
+import { AccountNumberService } from '../app/core/account-number.service'
 
 @Injectable()
 export class ApiService {
   // Remember to also change the URL in main.ts
   apiUrl = 'https://pulsarapi.passcess.net'
-  accountNumber = 'AC123456'
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private accountNumber: AccountNumberService,
+  ) {}
 
   // https://stackoverflow.com/questions/52797992/which-rxjs-operator-to-choose-to-handle-http-errors-tap-or-catcherror
   // intercept(req: HttpRequest<any>, next: HttpHandler) {
@@ -37,7 +40,7 @@ export class ApiService {
   // }
 
   buildQuery(query: string) {
-    return `${this.apiUrl}/api/${this.accountNumber}/${query}`
+    return `${this.apiUrl}/api/${this.accountNumber.get()}/${query}`
   }
 
   buildGetQuery(query: string, state: TableLazyLoadEvent) {

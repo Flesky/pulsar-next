@@ -10,6 +10,7 @@ import { OAuthErrorEvent, OAuthService } from 'angular-oauth2-oidc'
 import { authCodeFlowConfig } from '../utils/auth'
 import { NgIf } from '@angular/common'
 import { ToastModule } from 'primeng/toast'
+import { AccountNumberService } from './core/account-number.service'
 
 @Component({
   selector: 'app-root',
@@ -27,10 +28,15 @@ import { ToastModule } from 'primeng/toast'
   template: `
     <p-toast></p-toast>
     <div
-      *ngIf="name; else authPending"
+      *ngIf="name; else authenticating"
       class="absolute inset-0 flex h-full w-full"
     >
-      <app-sidebar [isCollapsed]="isCollapsed" />
+      <div
+        class="h-full w-64 shrink-0 overflow-y-auto bg-primary-dark py-2 "
+        *ngIf="!isCollapsed"
+      >
+        <app-sidebar />
+      </div>
       <div class="h-full shrink grow overflow-y-auto bg-gray-50">
         <div
           class="sticky top-0 z-50 flex h-14 w-full items-center justify-between bg-primary px-4"
@@ -55,13 +61,19 @@ import { ToastModule } from 'primeng/toast'
           </p-button>
         </div>
 
-        <div class="md:p-8">
+        <div class="md:p-8" *ngIf="pageStatus === 'Done'; else status">
           <router-outlet></router-outlet>
         </div>
+        <ng-template #status>
+          <div class="p-8">
+            {{ pageStatus }}
+          </div>
+        </ng-template>
       </div>
     </div>
     <p-menu #menu [model]="items" [popup]="true"></p-menu>
-    <ng-template #authPending>
+
+    <ng-template #authenticating>
       <p class="p-4">Authenticating...</p>
     </ng-template>
   `,
@@ -69,10 +81,15 @@ import { ToastModule } from 'primeng/toast'
 export class AppComponent implements OnInit {
   name: string | undefined
   isCollapsed = false
+  isMobile = false
+  pageStatus: string | undefined
 
-  constructor(private oauthService: OAuthService) {}
+  constructor(
+    private oauthService: OAuthService,
+    private accountService: AccountNumberService,
+  ) {}
 
-  ngOnInit() {
+  initAuth() {
     this.oauthService.configure(authCodeFlowConfig)
     this.oauthService.events.subscribe((event) => {
       if (event instanceof OAuthErrorEvent) {
@@ -82,6 +99,9 @@ export class AppComponent implements OnInit {
     this.oauthService
       .loadDiscoveryDocumentAndTryLogin({
         customHashFragment: window.location.search,
+        onTokenReceived: (info) => {
+          if (isDevMode()) console.log('onTokenReceived', info)
+        },
       })
       .then(() => {
         if (this.oauthService.hasValidAccessToken()) {
@@ -96,13 +116,32 @@ export class AppComponent implements OnInit {
                 ? `${given_name} ${family_name}`
                 : preferred_username
 
-            if (isDevMode())
-              console.log('Bearer ' + this.oauthService.getIdToken())
+            if (isDevMode()) {
+              navigator.clipboard.writeText(
+                'Bearer ' + this.oauthService.getAccessToken(),
+              )
+            }
           })
         } else {
-          this.oauthService.initCodeFlow()
+          this.oauthService.initCodeFlow(window.location.toString())
         }
       })
+  }
+
+  ngOnInit() {
+    this.initAuth()
+
+    // Refresh page on account change
+    this.accountService.accountNumber$.subscribe((value) => {
+      if (value.length) {
+        this.pageStatus = ''
+        setTimeout(() => {
+          this.pageStatus = 'Done'
+        }, 0)
+      } else {
+        this.pageStatus = 'No account number selected'
+      }
+    })
   }
 
   items: MenuItem[] = [

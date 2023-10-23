@@ -115,6 +115,10 @@ export class TableComponent implements OnInit {
   ngOnInit() {
     if (!this.get.observed)
       throw new Error('TableComponent requires a get listener')
+
+    // this.accountNumber.accountNumber$.subscribe((accountNumber) => {
+    //   this.get.emit()
+    // })
   }
 
   columnName(column: TableColumn) {

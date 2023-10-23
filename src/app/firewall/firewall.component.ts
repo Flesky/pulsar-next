@@ -44,7 +44,7 @@ export interface Root {
       [data]="data"
       [totalRecords]="totalRecords"
       [columns]="[
-        { name: 'Name' },
+        { name: 'Name', sortKey: 'Name' },
         { name: 'Outbound' },
         { name: 'Inbound' },
         'Actions'
