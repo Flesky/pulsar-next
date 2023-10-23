@@ -57,30 +57,38 @@ export interface Root {
         <tr>
           <td>{{ row.label }}</td>
           <td>
-            <p-tag
-              styleClass="leading-none mr-1"
-              [severity]="
-                row.outbound.defaultAction === 'allow' ? 'success' : 'danger'
-              "
-            >
-              {{ row.outbound.defaultAction.toUpperCase() }}
-            </p-tag>
-            {{ row.outbound.exceptions.length }} exception{{
-              row.outbound.exceptions.length !== 1 ? 's' : ''
-            }}
+            <div class="flex items-baseline">
+              <p-tag
+                styleClass="leading-none w-14 mr-2"
+                [severity]="
+                  row.outbound.defaultAction === 'allow' ? 'success' : 'danger'
+                "
+              >
+                {{ row.outbound.defaultAction.toUpperCase() }}
+              </p-tag>
+              <span class="whitespace-nowrap">
+                {{ row.outbound.exceptions.length }} exception{{
+                  row.outbound.exceptions.length !== 1 ? 's' : ''
+                }}
+              </span>
+            </div>
           </td>
           <td>
-            <p-tag
-              styleClass="leading-none mr-1"
-              [severity]="
-                row.inbound.defaultAction === 'allow' ? 'success' : 'danger'
-              "
-            >
-              {{ row.inbound.defaultAction.toUpperCase() }}
-            </p-tag>
-            {{ row.inbound.exceptions.length }} exception{{
-              row.inbound.exceptions.length !== 1 ? 's' : ''
-            }}
+            <div class="flex items-baseline">
+              <p-tag
+                styleClass="leading-none w-14 mr-2"
+                [severity]="
+                  row.inbound.defaultAction === 'allow' ? 'success' : 'danger'
+                "
+              >
+                {{ row.inbound.defaultAction.toUpperCase() }}
+              </p-tag>
+              <span class="whitespace-nowrap">
+                {{ row.inbound.exceptions.length }} exception{{
+                  row.inbound.exceptions.length !== 1 ? 's' : ''
+                }}</span
+              >
+            </div>
           </td>
           <td>
             <div class="row-actions">
