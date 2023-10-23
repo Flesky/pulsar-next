@@ -43,7 +43,11 @@ export interface Root {
       [loading]="loading"
       [data]="data"
       [totalRecords]="totalRecords"
-      [columns]="[{ name: 'Name' }, { name: 'Domains' }, 'Actions']"
+      [columns]="[
+        { name: 'Name', sortKey: 'label' },
+        { name: 'Domains' },
+        'Actions'
+      ]"
       (get)="get($event)"
       (create)="create()"
       itemName="domain filter"
