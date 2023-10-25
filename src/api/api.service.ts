@@ -44,17 +44,18 @@ export class ApiService {
   }
 
   buildGetQuery(query: string, state: TableLazyLoadEvent) {
-    // rows = page size, first / rows = page number
-    console.log(state)
-    const searchValue = (state.filters?.['search'] as FilterMetadata)?.['value']
-    const page = state.first! / state.rows! + 1
-    return `${this.buildQuery(query)}?page_size=${state.rows}&page=${page}${
-      state.sortField
-        ? `&sort=${state.sortField}&order=${
-            state.sortOrder! > 0 ? 'asc' : 'desc'
-          }`
-        : ''
-    }${searchValue ? `&search=${searchValue}` : ''}`
+    const url = new URL(this.buildQuery(query))
+    url.searchParams.append('page_size', String(state.rows))
+    url.searchParams.append('page', String(state.first! / state.rows! + 1))
+    const searchQuery = (state.filters?.['search'] as FilterMetadata)?.['value']
+    if (searchQuery) {
+      url.searchParams.append('search', searchQuery)
+    }
+    if (state.sortField) {
+      url.searchParams.append('sort', state.sortField as string)
+      url.searchParams.append('order', state.sortOrder! > 0 ? 'asc' : 'desc')
+    }
+    return url.href
   }
 
   // Templates
@@ -121,7 +122,7 @@ export class ApiService {
     return this.http.delete(`${this.buildQuery('DomainFilter/Profiles')}/${id}`)
   }
 
-  // Action log
+  // Action Log
   getActionLog(state: TableLazyLoadEvent) {
     return this.http.get<GetActionLog>(this.buildGetQuery('Activities', state))
   }

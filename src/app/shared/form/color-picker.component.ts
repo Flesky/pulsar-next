@@ -1,6 +1,5 @@
 import { Component } from '@angular/core'
 import { FieldType, FormlyModule } from '@ngx-formly/core'
-import { JsonPipe } from '@angular/common'
 import { ColorSketchModule } from 'ngx-color/sketch'
 import { ColorCircleModule } from 'ngx-color/circle'
 import { ColorEvent } from 'ngx-color'
@@ -8,7 +7,7 @@ import { ColorEvent } from 'ngx-color'
 @Component({
   selector: 'app-formly-object-type',
   standalone: true,
-  imports: [ColorSketchModule, FormlyModule, ColorCircleModule, JsonPipe],
+  imports: [ColorSketchModule, FormlyModule, ColorCircleModule],
   template: `
     <div class="p-field">
       <label [for]="id">{{ field.props?.label }}</label>

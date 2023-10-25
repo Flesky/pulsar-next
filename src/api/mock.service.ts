@@ -10,6 +10,7 @@ export class MockService {
   protected readonly url: string = 'https://dummyjson.com/'
   constructor(private http: HttpClient) {}
 
+  // rows = page size, first / rows = page number
   buildQuery(state: TableLazyLoadEvent) {
     const query = `skip=${state.first}&limit=${state.rows}`
     const searchValue = (state.filters?.['search'] as FilterMetadata)?.['value']
