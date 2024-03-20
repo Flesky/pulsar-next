@@ -70,7 +70,7 @@ bootstrapApplication(AppComponent, {
     provideHttpClient(withInterceptorsFromDi()),
     provideOAuthClient({
       resourceServer: {
-        allowedUrls: ['https://pulsarapi.passcess.net'],
+        allowedUrls: ['https://devpulsarapi.smsglobal.net'],
         sendAccessToken: true,
       },
     }),

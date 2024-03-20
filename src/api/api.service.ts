@@ -16,7 +16,7 @@ import { AccountNumberService } from '../app/core/account-number.service'
 @Injectable()
 export class ApiService {
   // Remember to also change the URL in main.ts
-  apiUrl = 'https://pulsarapi.passcess.net'
+  apiUrl = 'https://devpulsarapi.smsglobal.net'
 
   constructor(
     private http: HttpClient,
