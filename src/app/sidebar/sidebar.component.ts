@@ -176,7 +176,7 @@ export class SidebarComponent {
       label: 'Users',
       icon: faUsers,
       external: true,
-      link: 'https://auth.passcess.net/auth/admin/master/console/#/realms/master/users',
+      link: 'https://id.pivotel.com/admin/master/console/#/master/users',
     },
   ]
   _accountNumber = this.accountService.get()
